@@ -144,7 +144,7 @@
             transition: border-color 0.2s;
         }
 
-        input[type="email"]:focus, textarea :focus {
+        input[type="email"]:focus, textarea:focus {
             border-color: var(--primary-dark);
         }
 
@@ -176,14 +176,13 @@
             transform: scale(0.98);
         }
 
-        /* Success Message Simulation via CSS Target or JS */
         .success-message {
             display: none;
             background: #ecfdf5;
             color: #065f46;
-            padding: 15px;
+            padding: 20px;
             border-radius: 12px;
-            border: 1px solid #a7f3d0;
+            border: 2px solid #a7f3d0;
             text-align: center;
             margin-top: 15px;
             font-weight: 600;
@@ -200,6 +199,7 @@
 <body>
 
     <div class="container">
+        <!-- Logo con effetto rimbalzo ape -->
         <div class="logo-container">
             <img src="Logo Ufficiale.jpg" alt="Logo Mielangelami" class="logo-img">
         </div>
@@ -215,7 +215,8 @@
             <h3>Inviaci un mielemessaggio!</h3>
             <p>Raccontaci perché vorresti provare il nostro miele. In cambio riceverai subito un <strong>coupon del 25%</strong> per il lancio e verrai inserito nella nostra esclusiva wishlist!</p>
             
-            <form id="mieleForm" action="https://formspree.io/f/YOUR_FORMSPREE_ID_HERE" method="POST">
+            <!-- Form configurato con il tuo ID Formspree reale -->
+            <form id="mieleForm" action="https://formspree.io/f/mnjkzwjb" method="POST">
                 <div class="form-group">
                     <label for="email">La tua Email</label>
                     <input type="email" id="email" name="_replyto" placeholder="esempio@email.com" required>
@@ -225,11 +226,14 @@
                     <textarea id="messaggio" name="messaggio" placeholder="Vorrei provarlo perché..." required></textarea>
                 </div>
                 
-                <button type="submit" class="btn-miele">Invia il Mielemessaggio & Ricevi il 25%</button>
+                <button type="submit" id="submitBtn" class="btn-miele">Invia il Mielemessaggio & Ricevi il 25%</button>
             </form>
             
             <div id="successBox" class="success-message">
-                🐝 Mielemessaggio inviato! Grazie! Il tuo codice coupon del 25% è: <span style="color: #d97706; font-weight: 800;">MIELANGELA25</span>
+                🐝 Mielemessaggio inviato con successo!<br><br>
+                Grazie per aver condiviso il tuo pensiero, la tua email è stata aggiunta alla nostra wishlist.<br><br>
+                Il tuo codice coupon del 25% è: <br>
+                <span style="color: #d97706; font-weight: 800; font-size: 1.4rem; display: block; margin-top: 10px; background: #fff; padding: 10px; border-radius: 8px; border: 1px dashed #f59e0b;">MIELANGELA25</span>
             </div>
         </div>
     </div>
@@ -240,23 +244,40 @@
     </div>
 
     <script>
-        // Semplice script per simulare il successo del form e mostrare il codice sconto a schermo
         const form = document.getElementById('mieleForm');
         const successBox = document.getElementById('successBox');
+        const submitBtn = document.getElementById('submitBtn');
 
         form.addEventListener('submit', function(e) {
-            // Nota: Se usi Formspree, rimuovi e.preventDefault() per far inviare la mail davvero,
-            // oppure gestisci l'invio via fetch AJAX. Per ora lo mostriamo a schermo!
             e.preventDefault();
-            form.style.display = 'none';
-            successBox.style.width = '100%';
-            successBox.style.display = 'block';
+            submitBtn.innerText = "Invio in corso...";
+            submitBtn.disabled = true;
+
+            const formData = new FormData(form);
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    form.style.display = 'none';
+                    successBox.style.display = 'block';
+                } else {
+                    alert("Ops! C'è stato un problema con l'invio. Riprova tra poco.");
+                    submitBtn.innerText = "Invia il Mielemessaggio & Ricevi il 25%";
+                    submitBtn.disabled = false;
+                }
+            })
+            .catch(error => {
+                alert("Ops! Errore di connessione. Riprova tra poco.");
+                submitBtn.innerText = "Invia il Mielemessaggio & Ricevi il 25%";
+                submitBtn.disabled = false;
+            });
         });
     </script>
 </body>
 </html>
-"""
-
-with open("index.html", "w", encoding="utf-8") as f:
-    f.write(html_code)
-print("File index.html aggiornato con successo.")
