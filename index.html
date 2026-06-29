@@ -1,0 +1,262 @@
+html_code = """<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mielangelami | In Costruzione</title>
+    <style>
+        :root {
+            --primary: #f9c74f;
+            --primary-dark: #f9844a;
+            --accent: #f9c74f;
+            --bg: #fffbeb;
+            --text: #451a03;
+            --text-light: #78350f;
+            --card-bg: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 650px;
+            width: 100%;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(120, 53, 15, 0.08);
+            backdrop-filter: blur(8px);
+            border: 2px solid #fef3c7;
+            z-index: 2;
+        }
+
+        /* Animazione Logo che Rimbalza come un'Ape */
+        .logo-container {
+            width: 220px;
+            height: 220px;
+            margin: 0 auto 30px auto;
+            position: relative;
+            animation: beeBuzz 4s ease-in-out infinite;
+        }
+
+        .logo-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 50%;
+        }
+
+        @keyframes beeBuzz {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            15% { transform: translate(15px, -20px) rotate(5deg); }
+            30% { transform: translate(-10px, -40px) rotate(-8deg); }
+            45% { transform: translate(20px, -15px) rotate(10deg); }
+            60% { transform: translate(-15px, -35px) rotate(-5deg); }
+            75% { transform: translate(10px, -10px) rotate(4deg); }
+            90% { transform: translate(-5px, -25px) rotate(-2deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #451a03;
+            font-weight: 800;
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+
+        .description {
+            font-size: 1.05rem;
+            margin-bottom: 30px;
+            color: #451a03;
+        }
+
+        /* Box del Form */
+        .miele-box {
+            background-color: var(--card-bg);
+            padding: 30px 25px;
+            border-radius: 20px;
+            border: 2px solid #fde68a;
+            box-shadow: 0 4px 15px rgba(120, 53, 15, 0.03);
+            text-align: left;
+        }
+
+        .miele-box h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #451a03;
+            text-align: center;
+        }
+
+        .miele-box p {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #451a03;
+        }
+
+        input[type="email"], textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #fcd34d;
+            border-radius: 12px;
+            background-color: #fffdf5;
+            font-family: inherit;
+            font-size: 0.95rem;
+            color: var(--text);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input[type="email"]:focus, textarea :focus {
+            border-color: var(--primary-dark);
+        }
+
+        textarea {
+            resize: vertical;
+            height: 80px;
+        }
+
+        .btn-miele {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background-color: #f59e0b;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            text-align: center;
+        }
+
+        .btn-miele:hover {
+            background-color: #d97706;
+        }
+
+        .btn-miele:active {
+            transform: scale(0.98);
+        }
+
+        /* Success Message Simulation via CSS Target or JS */
+        .success-message {
+            display: none;
+            background: #ecfdf5;
+            color: #065f46;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #a7f3d0;
+            text-align: center;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+
+        .footer {
+            margin-top: 40px;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            z-index: 2;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="logo-container">
+            <img src="Logo Ufficiale.jpg" alt="Logo Mielangelami" class="logo-img">
+        </div>
+
+        <h1>Mielangelami</h1>
+        <p class="tagline">Il Miele Buono 🍯</p>
+        
+        <p class="description">
+            Il nostro nuovo sito è in pieno fermento creativo. Stiamo preparando un miele artigianale unico, puro e goloso.
+        </p>
+        
+        <div class="miele-box">
+            <h3>Inviaci un mielemessaggio!</h3>
+            <p>Raccontaci perché vorresti provare il nostro miele. In cambio riceverai subito un <strong>coupon del 25%</strong> per il lancio e verrai inserito nella nostra esclusiva wishlist!</p>
+            
+            <form id="mieleForm" action="https://formspree.io/f/YOUR_FORMSPREE_ID_HERE" method="POST">
+                <div class="form-group">
+                    <label for="email">La tua Email</label>
+                    <input type="email" id="email" name="_replyto" placeholder="esempio@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="messaggio">Il tuo Mielemessaggio 🐝</label>
+                    <textarea id="messaggio" name="messaggio" placeholder="Vorrei provarlo perché..." required></textarea>
+                </div>
+                
+                <button type="submit" class="btn-miele">Invia il Mielemessaggio & Ricevi il 25%</button>
+            </form>
+            
+            <div id="successBox" class="success-message">
+                🐝 Mielemessaggio inviato! Grazie! Il tuo codice coupon del 25% è: <span style="color: #d97706; font-weight: 800;">MIELANGELA25</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        &copy; 2026 Mielangelami. www.mielangelami.com <br>
+        Mangiami — Il Miele Buono.
+    </div>
+
+    <script>
+        // Semplice script per simulare il successo del form e mostrare il codice sconto a schermo
+        const form = document.getElementById('mieleForm');
+        const successBox = document.getElementById('successBox');
+
+        form.addEventListener('submit', function(e) {
+            // Nota: Se usi Formspree, rimuovi e.preventDefault() per far inviare la mail davvero,
+            // oppure gestisci l'invio via fetch AJAX. Per ora lo mostriamo a schermo!
+            e.preventDefault();
+            form.style.display = 'none';
+            successBox.style.width = '100%';
+            successBox.style.display = 'block';
+        });
+    </script>
+</body>
+</html>
+"""
+
+with open("index.html", "w", encoding="utf-8") as f:
+    f.write(html_code)
+print("File index.html aggiornato con successo.")
