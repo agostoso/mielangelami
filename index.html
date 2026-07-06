@@ -86,13 +86,55 @@
             font-size: 1.2rem;
             color: var(--text-light);
             font-weight: 600;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
+        }
+
+        /* STILI DEL CAROSELLO TESTIMONIANZE */
+        .testimonials-carousel {
+            max-width: 85%;
+            margin: 0 auto 30px auto;
+            overflow: hidden;
+            position: relative;
+            min-height: 85px; /* Evita che la pagina salti se un messaggio è più lungo */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .testimonial-slide {
+            display: none;
+            font-style: italic;
+            font-size: 1.05rem;
+            color: #78350f;
+            animation: fadeInOut 0.6s ease-in-out;
+            font-weight: 500;
+        }
+
+        .testimonial-slide.active {
+            display: block;
+        }
+
+        .testimonial-author {
+            display: block;
+            font-size: 0.85rem;
+            font-style: normal;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #f59e0b;
+            margin-top: 8px;
+        }
+
+        @keyframes fadeInOut {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .description {
             font-size: 1.05rem;
             margin-bottom: 30px;
             color: #451a03;
+            font-weight: 600;
         }
 
         /* Box del Form */
@@ -207,6 +249,22 @@
         <h1>Mielangelami</h1>
         <p class="tagline">Il Miele Buono 🍯</p>
         
+        <!-- CAROSELLO DELLE TESTIMONIANZE (Inserite a mano) -->
+        <div class="testimonials-carousel">
+            <div class="testimonial-slide active">
+                "Non vedo l'ora di provarlo sulle fette biscottate la mattina! Il nome è bellissimo."
+                <span class="testimonial-author">- Elena R.</span>
+            </div>
+            <div class="testimonial-slide">
+                "Incuriosito dal mielemessaggio... spero arrivi presto il lancio, adoro il miele artigianale!"
+                <span class="testimonial-author">- Marco T.</span>
+            </div>
+            <div class="testimonial-slide">
+                "Voglio provarlo perché trasmette passione già da questa pagina. In bocca al lupo!"
+                <span class="testimonial-author">- Sofia V.</span>
+            </div>
+        </div>
+        
         <p class="description">
             Buono ? Mangiami
         </p>
@@ -227,13 +285,12 @@
                 </div>
                 
                 <div class="privacy-group" style="margin-bottom: 20px; display: flex; align-items: flex-start; gap: 10px; text-align: left;">
-    <input type="checkbox" id="privacy" required style="margin-top: 4px; cursor: pointer; accent-color: #f59e0b;">
-    <label for="privacy" class="privacy-label" style="font-size: 0.85rem; font-weight: 500; color: #78350f; line-height: 1.4; cursor: pointer;">
-        Acconsento al trattamento dei dati personali unicamente per ricevere il codice coupon e l'avviso di lancio del sito, in piena conformità alle normative sulla privacy (GDPR).
-    </label>
-</div>
+                    <input type="checkbox" id="privacy" required style="margin-top: 4px; cursor: pointer; accent-color: #f59e0b;">
+                    <label for="privacy" class="privacy-label" style="font-size: 0.85rem; font-weight: 500; color: #78350f; line-height: 1.4; cursor: pointer;">
+                        Acconsento al trattamento dei dati personali unicamente per ricevere il codice coupon e l'avviso di lancio del sito, in piena conformità alle normative sulla privacy (GDPR).
+                    </label>
+                </div>
 
-                
                 <button type="submit" id="submitBtn" class="btn-miele">Invia il Mielemessaggio & Ricevi il 25%</button>
             </form>
             
@@ -252,6 +309,22 @@
     </div>
 
     <script>
+        // LOGICA DEL CAROSELLO
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.testimonial-slide');
+        
+        function showNextTestimonial() {
+            if (slides.length === 0) return;
+            
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }
+        
+        // Cambia testimonianza ogni 4 secondi (4000 millisecondi)
+        setInterval(showNextTestimonial, 4000);
+
+        // LOGICA DEL FORM FORMYSUPPORT
         const form = document.getElementById('mieleForm');
         const successBox = document.getElementById('successBox');
         const submitBtn = document.getElementById('submitBtn');
