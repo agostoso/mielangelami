@@ -25,34 +25,35 @@
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg);
             color: var(--text);
-            line-height: 1.6;
+            line-height: 1.5;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             min-height: 100vh;
-            padding: 20px;
+            padding: 15px 10px;
             text-align: center;
             overflow-x: hidden;
         }
 
         .container {
-            max-width: 650px;
+            max-width: 600px;
             width: 100%;
-            padding: 40px 20px;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 30px;
+            padding: 25px 18px;
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 24px;
             box-shadow: 0 10px 30px rgba(120, 53, 15, 0.08);
             backdrop-filter: blur(8px);
             border: 2px solid #fef3c7;
             z-index: 2;
+            margin: auto 0;
         }
 
         /* Animazione Logo che Rimbalza come un'Ape */
         .logo-container {
-            width: 220px;
-            height: 220px;
-            margin: 0 auto 30px auto;
+            width: clamp(130px, 30vw, 200px);
+            height: clamp(130px, 30vw, 200px);
+            margin: 0 auto 15px auto;
             position: relative;
             animation: beeBuzz 4s ease-in-out infinite;
         }
@@ -66,36 +67,37 @@
 
         @keyframes beeBuzz {
             0% { transform: translate(0, 0) rotate(0deg); }
-            15% { transform: translate(15px, -20px) rotate(5deg); }
-            30% { transform: translate(-10px, -40px) rotate(-8deg); }
-            45% { transform: translate(20px, -15px) rotate(10deg); }
-            60% { transform: translate(-15px, -35px) rotate(-5deg); }
-            75% { transform: translate(10px, -10px) rotate(4deg); }
-            90% { transform: translate(-5px, -25px) rotate(-2deg); }
+            15% { transform: translate(10px, -12px) rotate(5deg); }
+            30% { transform: translate(-8px, -20px) rotate(-6deg); }
+            45% { transform: translate(12px, -10px) rotate(8deg); }
+            60% { transform: translate(-10px, -18px) rotate(-4deg); }
+            75% { transform: translate(8px, -6px) rotate(3deg); }
+            90% { transform: translate(-4px, -12px) rotate(-2deg); }
             100% { transform: translate(0, 0) rotate(0deg); }
         }
 
         h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+            font-size: clamp(1.8rem, 5vw, 2.4rem);
+            margin-bottom: 4px;
             color: #451a03;
             font-weight: 800;
         }
 
         .tagline {
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 3vw, 1.15rem);
             color: var(--text-light);
             font-weight: 600;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         /* STILI DEL CAROSELLO TESTIMONIANZE */
         .testimonials-carousel {
-            max-width: 85%;
-            margin: 0 auto 30px auto;
+            width: 100%;
+            max-width: 520px;
+            margin: 0 auto 15px auto;
             overflow: hidden;
             position: relative;
-            min-height: 150px; /* Spazio sufficiente per testi lunghi o poesie */
+            min-height: 110px; /* Ridotto per non sprecare spazio vuoto */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -104,11 +106,12 @@
         .testimonial-slide {
             display: none;
             font-style: italic;
-            font-size: 0.98rem;
+            font-size: clamp(0.85rem, 2.5vw, 0.95rem);
             color: #78350f;
             animation: fadeInOut 0.6s ease-in-out;
             font-weight: 500;
-            white-space: pre-line; /* PERMETTE I TESTI A CAPO DEL JSON (\n) */
+            white-space: pre-line;
+            padding: 0 5px;
         }
 
         .testimonial-slide.active {
@@ -117,23 +120,23 @@
 
         .testimonial-author {
             display: block;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-style: normal;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
             color: #f59e0b;
-            margin-top: 10px;
+            margin-top: 6px;
         }
 
         @keyframes fadeInOut {
-            from { opacity: 0; transform: translateY(5px); }
+            from { opacity: 0; transform: translateY(4px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .description {
-            font-size: 1.05rem;
-            margin-bottom: 30px;
+            font-size: 1rem;
+            margin-bottom: 18px;
             color: #451a03;
             font-weight: 600;
         }
@@ -141,47 +144,47 @@
         /* Box del Form */
         .miele-box {
             background-color: var(--card-bg);
-            padding: 30px 25px;
-            border-radius: 20px;
+            padding: 20px 16px;
+            border-radius: 16px;
             border: 2px solid #fde68a;
             box-shadow: 0 4px 15px rgba(120, 53, 15, 0.03);
             text-align: left;
         }
 
         .miele-box h3 {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
+            font-size: clamp(1.05rem, 3.5vw, 1.2rem);
+            margin-bottom: 6px;
             color: #451a03;
             text-align: center;
         }
 
         .miele-box p {
-            font-size: 0.95rem;
+            font-size: 0.88rem;
             color: var(--text-light);
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             text-align: center;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         label {
             display: block;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 600;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
             color: #451a03;
         }
 
         input[type="email"], textarea {
             width: 100%;
-            padding: 12px;
+            padding: 10px 12px;
             border: 2px solid #fcd34d;
-            border-radius: 12px;
+            border-radius: 10px;
             background-color: #fffdf5;
             font-family: inherit;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: var(--text);
             outline: none;
             transition: border-color 0.2s;
@@ -193,18 +196,18 @@
 
         textarea {
             resize: vertical;
-            height: 80px;
+            height: 70px;
         }
 
         .btn-miele {
             display: block;
             width: 100%;
-            padding: 14px;
+            padding: 12px;
             background-color: #f59e0b;
             color: white;
             border: none;
-            border-radius: 12px;
-            font-size: 1rem;
+            border-radius: 10px;
+            font-size: 0.95rem;
             font-weight: 700;
             cursor: pointer;
             transition: background-color 0.2s, transform 0.1s;
@@ -223,19 +226,40 @@
             display: none;
             background: #ecfdf5;
             color: #065f46;
-            padding: 20px;
-            border-radius: 12px;
+            padding: 15px;
+            border-radius: 10px;
             border: 2px solid #a7f3d0;
             text-align: center;
-            margin-top: 15px;
+            margin-top: 12px;
             font-weight: 600;
+            font-size: 0.9rem;
         }
 
         .footer {
-            margin-top: 40px;
-            font-size: 0.85rem;
+            margin-top: 20px;
+            font-size: 0.8rem;
             color: var(--text-light);
             z-index: 2;
+        }
+
+        /* MEDIA QUERIES PER SCHERMI MOLTO PICCOLI (Mobile Portrait) */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px 8px;
+            }
+
+            .container {
+                padding: 18px 12px;
+                border-radius: 18px;
+            }
+
+            .miele-box {
+                padding: 16px 12px;
+            }
+
+            textarea {
+                height: 60px;
+            }
         }
     </style>
 </head>
@@ -273,9 +297,9 @@
                     <textarea id="messaggio" name="messaggio" placeholder="Vorrei provarlo perché..." required></textarea>
                 </div>
                 
-                <div class="privacy-group" style="margin-bottom: 20px; display: flex; align-items: flex-start; gap: 10px; text-align: left;">
-                    <input type="checkbox" id="privacy" required style="margin-top: 4px; cursor: pointer; accent-color: #f59e0b;">
-                    <label for="privacy" class="privacy-label" style="font-size: 0.85rem; font-weight: 500; color: #78350f; line-height: 1.4; cursor: pointer;">
+                <div class="privacy-group" style="margin-bottom: 15px; display: flex; align-items: flex-start; gap: 8px; text-align: left;">
+                    <input type="checkbox" id="privacy" required style="margin-top: 3px; cursor: pointer; accent-color: #f59e0b;">
+                    <label for="privacy" class="privacy-label" style="font-size: 0.8rem; font-weight: 500; color: #78350f; line-height: 1.3; cursor: pointer;">
                         Acconsento al trattamento dei dati personali unicamente per ricevere il codice coupon e l'avviso di lancio del sito, in piena conformità alle normative sulla privacy (GDPR).
                     </label>
                 </div>
@@ -287,7 +311,7 @@
                 🐝 Mielemessaggio inviato con successo!<br><br>
                 Grazie per aver condiviso il tuo pensiero, la tua email è stata aggiunta alla nostra wishlist.<br><br>
                 Il tuo codice coupon del 25% è: <br>
-                <span style="color: #d97706; font-weight: 800; font-size: 1.4rem; display: block; margin-top: 10px; background: #fff; padding: 10px; border-radius: 8px; border: 1px dashed #f59e0b;">MIELANGELA25</span>
+                <span style="color: #d97706; font-weight: 800; font-size: 1.2rem; display: block; margin-top: 8px; background: #fff; padding: 8px; border-radius: 8px; border: 1px dashed #f59e0b;">MIELANGELA25</span>
             </div>
         </div>
     </div>
@@ -310,7 +334,6 @@
             slides[currentSlide].classList.add('active');
         }
 
-        // Lettura del file json tramite fetch
         fetch('testimonianze.json')
             .then(response => response.json())
             .then(data => {
@@ -324,8 +347,6 @@
                 });
 
                 slides = document.querySelectorAll('.testimonial-slide');
-
-                // Cambia testimonianza ogni 8 secondi (8000 ms) per permettere di leggere i testi più lunghi
                 setInterval(showNextTestimonial, 8000);
             })
             .catch(error => {
