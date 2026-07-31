@@ -202,31 +202,61 @@
             color: var(--primary-dark);
         }
 
-        /* PULSANTI DI CONTROLLO (Pausa e Navigazione) */
+        /* NUOVA NAVIGAZIONE CLASSICA (Pulsanti Freccia Minimal) */
         .controls-wrapper {
             display: flex;
-            gap: 8px;
+            align-items: center;
+            gap: 6px;
         }
 
         .ctrl-btn {
-            background: #ffffff;
-            border: 2px solid #fde68a;
+            background: transparent;
+            border: 1px solid #fcd34d;
             color: var(--text-light);
-            border-radius: 8px;
-            width: 34px;
-            height: 34px;
-            font-size: 0.9rem;
-            font-weight: bold;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.2s ease;
+            padding: 0;
+        }
+
+        .ctrl-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: var(--text-light);
+            transition: fill 0.2s ease;
         }
 
         .ctrl-btn:hover {
-            background-color: #fde68a;
-            color: #451a03;
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .ctrl-btn:hover svg {
+            fill: #ffffff;
+        }
+
+        .pause-text-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-light);
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.2s ease;
+        }
+
+        .pause-text-btn:hover {
+            color: var(--primary-dark);
+            background: rgba(253, 230, 138, 0.4);
         }
 
         /* GRIGLIA A 4 QUADRANTI */
@@ -360,15 +390,20 @@
             </div>
         </div>
 
-        <!-- SEZIONE DESTRO/CENTRALE: QUADRANTI + CONTROLLI -->
+        <!-- SEZIONE DESTRO/CENTRALE: QUADRANTI + CONTROLLI CLASSICI -->
         <div class="content-right">
             <div class="section-header">
-                <div class="section-title">🐝 Mielemessaggi </div>
-                <!-- PULSANTI PER NAVIGARE E METTERE IN PAUSA -->
+                <div class="section-title">🐝 Mielemessaggi</div>
+                
+                <!-- FRECCE CLASSICHE DI NAVIGAZIONE CON TESTO PAUSA -->
                 <div class="controls-wrapper">
-                    <button class="ctrl-btn" id="prevBtn" title="Precedenti">◄</button>
-                    <button class="ctrl-btn" id="pauseBtn" title="Metti in Pausa">⏸</button>
-                    <button class="ctrl-btn" id="nextBtn" title="Successivi">►</button>
+                    <button class="pause-text-btn" id="pauseBtn" title="Pausa automatico">Pausa</button>
+                    <button class="ctrl-btn" id="prevBtn" title="Precedenti">
+                        <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+                    </button>
+                    <button class="ctrl-btn" id="nextBtn" title="Successivi">
+                        <svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+                    </button>
                 </div>
             </div>
             
@@ -410,7 +445,7 @@
                 // Pausa temporanea quando il cursore va su un singolo messaggio
                 card.addEventListener('mouseenter', () => { isPaused = true; });
                 card.addEventListener('mouseleave', () => { 
-                    if (pauseBtn.innerText === '⏸') isPaused = false; 
+                    if (pauseBtn.innerText === 'PAUSA') isPaused = false; 
                 });
 
                 gridContainer.appendChild(card);
@@ -436,15 +471,14 @@
             }, 10000);
         }
 
-        // ELEMENTI INTERFACCIA CONTROLLO
+        // ELEMENTI INTERFACCIA CONTROLLO CLASSICI
         const pauseBtn = document.getElementById('pauseBtn');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
 
         pauseBtn.addEventListener('click', () => {
             isPaused = !isPaused;
-            pauseBtn.innerText = isPaused ? '▶' : '⏸';
-            pauseBtn.title = isPaused ? 'Riprendi Scorrimento' : 'Metti in Pausa';
+            pauseBtn.innerText = isPaused ? 'RIPRENDI' : 'PAUSA';
         });
 
         prevBtn.addEventListener('click', () => {
