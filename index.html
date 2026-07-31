@@ -95,7 +95,7 @@
             margin: 0 auto 30px auto;
             overflow: hidden;
             position: relative;
-            min-height: 85px;
+            min-height: 150px; /* Spazio sufficiente per testi lunghi o poesie */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -104,10 +104,11 @@
         .testimonial-slide {
             display: none;
             font-style: italic;
-            font-size: 1.05rem;
+            font-size: 0.98rem;
             color: #78350f;
             animation: fadeInOut 0.6s ease-in-out;
             font-weight: 500;
+            white-space: pre-line; /* PERMETTE I TESTI A CAPO DEL JSON (\n) */
         }
 
         .testimonial-slide.active {
@@ -122,7 +123,7 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             color: #f59e0b;
-            margin-top: 8px;
+            margin-top: 10px;
         }
 
         @keyframes fadeInOut {
@@ -249,9 +250,9 @@
         <h1>Mielangelami</h1>
         <p class="tagline">Il Miele Buono 🍯</p>
         
-        <!-- CAROSELLO DELLE TESTIMONIANZE (Caricato dinamicamente tramite JS) -->
+        <!-- CAROSELLO DELLE TESTIMONIANZE (Caricato dinamicamente dal JSON) -->
         <div class="testimonials-carousel" id="testimonialsCarousel">
-            <!-- I commenti verranno inseriti qui dal file JSON -->
+            <!-- I dati inseriti nel JSON compariranno qui automaticamente -->
         </div>
         
         <p class="description">
@@ -297,7 +298,7 @@
     </div>
 
     <script>
-        // CARICAMENTO DINAMICO DELLE TESTIMONIANZE DA JSON
+        // LOGICA DI CARICAMENTO TESTIMONIANZE DA FILE JSON
         let currentSlide = 0;
         let slides = [];
 
@@ -309,13 +310,12 @@
             slides[currentSlide].classList.add('active');
         }
 
-        // Fetch per prendere i dati dal file JSON
+        // Lettura del file json tramite fetch
         fetch('testimonianze.json')
             .then(response => response.json())
             .then(data => {
                 const container = document.getElementById('testimonialsCarousel');
                 
-                // Popola il container con i dati scritti nel JSON
                 data.forEach((item, index) => {
                     const slide = document.createElement('div');
                     slide.className = `testimonial-slide ${index === 0 ? 'active' : ''}`;
@@ -323,17 +323,16 @@
                     container.appendChild(slide);
                 });
 
-                // Aggiorna la lista dei nodi delle slide
                 slides = document.querySelectorAll('.testimonial-slide');
 
-                // Avvia l'intervallo solo dopo che i dati sono stati caricati
-                setInterval(showNextTestimonial, 6000);
+                // Cambia testimonianza ogni 8 secondi (8000 ms) per permettere di leggere i testi più lunghi
+                setInterval(showNextTestimonial, 8000);
             })
             .catch(error => {
-                console.error("Errore nel caricamento delle testimonianze:", error);
+                console.error("Errore durante il caricamento di testimoniane.json:", error);
             });
 
-        // LOGICA DEL FORM FORMSPREE
+        // LOGICA FORM FORMSPREE
         const form = document.getElementById('mieleForm');
         const successBox = document.getElementById('successBox');
         const submitBtn = document.getElementById('submitBtn');
