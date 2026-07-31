@@ -95,7 +95,7 @@
             margin: 0 auto 30px auto;
             overflow: hidden;
             position: relative;
-            min-height: 85px; /* Evita che la pagina salti se un messaggio è più lungo */
+            min-height: 85px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -249,45 +249,9 @@
         <h1>Mielangelami</h1>
         <p class="tagline">Il Miele Buono 🍯</p>
         
-        <!-- CAROSELLO DELLE TESTIMONIANZE (Inserite a mano) -->
-        
-        <div class="testimonials-carousel">
-            <div class="testimonial-slide active">
-                "Vorrei costruire una casa fatta di barattoli di mielangela "
-                <span class="testimonial-author">- Gianluca G.</span>
-            </div>
-        
-            <div class="testimonial-slide">
-                "Vorrei provarlo per sentire se è buono "
-                <span class="testimonial-author">- Lia V.</span>
-            </div>
-            
-            <div class="testimonial-slide">
-                "Il mio mielemessaggio, il miele più buono che c’è, pronta ad assaggiarlo, miele di ogni tipo. Buono. Gnam 🤤"
-                <span class="testimonial-author">- Angela T.</span>
-            </div>
-
-            <div class="testimonial-slide">
-                "mi piace il miele ma non voglio che mi rubi i dati quindi acconsentirò al gdpr ma NON RUBARMI I DATI ciao"
-                <span class="testimonial-author">- Thomas I.</span>
-            </div>            
-
-            <div class="testimonial-slide">
-                "Perchè è il miele più buono che c'è "
-                <span class="testimonial-author">- Nicolas M.</span>
-            </div>       
-
-            <div class="testimonial-slide">
-                "Incredibile, provato in anteprima!"
-                <span class="testimonial-author">- Matteo B.</span>
-            </div>               
-
-            <div class="testimonial-slide">
-                "Perchè io sono un grande appassionato di miele e vorrei assolutamente assaggiare il vostro. 
-                Se poi poi voi foste così temerari da produrre anche miele di corbezzolo o di rododendro, raccogliereste subito la mia più immensa stima! "
-                <span class="testimonial-author">- Alberto G.</span>
-            </div>   
-            
+        <!-- CAROSELLO DELLE TESTIMONIANZE (Caricato dinamicamente tramite JS) -->
+        <div class="testimonials-carousel" id="testimonialsCarousel">
+            <!-- I commenti verranno inseriti qui dal file JSON -->
         </div>
         
         <p class="description">
@@ -298,7 +262,6 @@
             <h3>Inviaci un mielemessaggio!</h3>
             <p>Raccontaci perché vorresti provare il nostro miele. In cambio riceverai subito un <strong>coupon del 25%</strong> per il lancio e verrai inserito nella nostra esclusiva wishlist!</p>
             
-            <!-- Form configurato con il tuo ID Formspree reale -->
             <form id="mieleForm" action="https://formspree.io/f/mnjkzwjb" method="POST">
                 <div class="form-group">
                     <label for="email">La tua Email</label>
@@ -334,10 +297,10 @@
     </div>
 
     <script>
-        // LOGICA DEL CAROSELLO
+        // CARICAMENTO DINAMICO DELLE TESTIMONIANZE DA JSON
         let currentSlide = 0;
-        const slides = document.querySelectorAll('.testimonial-slide');
-        
+        let slides = [];
+
         function showNextTestimonial() {
             if (slides.length === 0) return;
             
@@ -345,11 +308,32 @@
             currentSlide = (currentSlide + 1) % slides.length;
             slides[currentSlide].classList.add('active');
         }
-        
-        // Cambia testimonianza ogni 4 secondi (4000 millisecondi)
-        setInterval(showNextTestimonial, 6000);
 
-        // LOGICA DEL FORM FORMYSUPPORT
+        // Fetch per prendere i dati dal file JSON
+        fetch('testimonianze.json')
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('testimonialsCarousel');
+                
+                // Popola il container con i dati scritti nel JSON
+                data.forEach((item, index) => {
+                    const slide = document.createElement('div');
+                    slide.className = `testimonial-slide ${index === 0 ? 'active' : ''}`;
+                    slide.innerHTML = `"${item.testo}" <span class="testimonial-author">- ${item.autore}</span>`;
+                    container.appendChild(slide);
+                });
+
+                // Aggiorna la lista dei nodi delle slide
+                slides = document.querySelectorAll('.testimonial-slide');
+
+                // Avvia l'intervallo solo dopo che i dati sono stati caricati
+                setInterval(showNextTestimonial, 6000);
+            })
+            .catch(error => {
+                console.error("Errore nel caricamento delle testimonianze:", error);
+            });
+
+        // LOGICA DEL FORM FORMSPREE
         const form = document.getElementById('mieleForm');
         const successBox = document.getElementById('successBox');
         const submitBtn = document.getElementById('submitBtn');
