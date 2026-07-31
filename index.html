@@ -178,12 +178,20 @@
             font-size: 0.85rem;
         }
 
-        /* SEZIONE DESTRO/CENTRALE: 4 QUADRANTI PER I MIELEMESSAGGI */
+        /* SEZIONE DESTRO/CENTRALE: 4 QUADRANTI + CONTROLLI */
         .content-right {
             flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding: 0 5px;
         }
 
         .section-title {
@@ -192,8 +200,33 @@
             letter-spacing: 2px;
             font-weight: 800;
             color: var(--primary-dark);
-            margin-bottom: 15px;
-            text-align: center;
+        }
+
+        /* PULSANTI DI CONTROLLO (Pausa e Navigazione) */
+        .controls-wrapper {
+            display: flex;
+            gap: 8px;
+        }
+
+        .ctrl-btn {
+            background: #ffffff;
+            border: 2px solid #fde68a;
+            color: var(--text-light);
+            border-radius: 8px;
+            width: 34px;
+            height: 34px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .ctrl-btn:hover {
+            background-color: #fde68a;
+            color: #451a03;
         }
 
         /* GRIGLIA A 4 QUADRANTI */
@@ -219,6 +252,12 @@
             position: relative;
             animation: fadeIn 0.6s ease-in-out;
             min-height: 160px;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .quadrant-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary);
         }
 
         .quadrant-card .message-text {
@@ -270,7 +309,7 @@
             }
 
             .grid-quadrants {
-                grid-template-columns: 1fr; /* Su cellulare diventano una colonna verticale */
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -321,9 +360,17 @@
             </div>
         </div>
 
-        <!-- SEZIONE DESTRO/CENTRALE: GRIGLIA A 4 QUADRANTI -->
+        <!-- SEZIONE DESTRO/CENTRALE: QUADRANTI + CONTROLLI -->
         <div class="content-right">
-            <div class="section-title">🐝 Bacheca Mielemessaggi </div>
+            <div class="section-header">
+                <div class="section-title">🐝 Cosa dicono di noi (Mielemessaggi)</div>
+                <!-- PULSANTI PER NAVIGARE E METTERE IN PAUSA -->
+                <div class="controls-wrapper">
+                    <button class="ctrl-btn" id="prevBtn" title="Precedenti">◄</button>
+                    <button class="ctrl-btn" id="pauseBtn" title="Metti in Pausa">⏸</button>
+                    <button class="ctrl-btn" id="nextBtn" title="Successivi">►</button>
+                </div>
+            </div>
             
             <div class="grid-quadrants" id="gridQuadrants">
                 <!-- I 4 quadranti verranno inseriti qua via JavaScript -->
@@ -337,17 +384,18 @@
     </div>
 
     <script>
-        // CARICAMENTO CAROSELLO A 4 QUADRANTI DAL JSON
+        // CARICAMENTO CAROSELLO A 4 QUADRANTI CON CONTROLLI E PAUSA
         let allMessages = [];
         let currentIndex = 0;
+        let isPaused = false;
+        let autoRotateInterval = null;
 
         function renderQuadrants() {
             if (allMessages.length === 0) return;
             
             const gridContainer = document.getElementById('gridQuadrants');
-            gridContainer.innerHTML = ''; // Pulisce i vecchi quadranti
+            gridContainer.innerHTML = '';
 
-            // Prende fino a 4 messaggi consecutivi
             for (let i = 0; i < 4; i++) {
                 const messageIndex = (currentIndex + i) % allMessages.length;
                 const item = allMessages[messageIndex];
@@ -358,23 +406,61 @@
                     <div class="message-text">"${item.testo}"</div>
                     <span class="author">- ${item.autore}</span>
                 `;
+                
+                // Pausa temporanea quando il cursore va su un singolo messaggio
+                card.addEventListener('mouseenter', () => { isPaused = true; });
+                card.addEventListener('mouseleave', () => { 
+                    if (pauseBtn.innerText === '⏸') isPaused = false; 
+                });
+
                 gridContainer.appendChild(card);
             }
-
-            // Sposta l'indice avanti di 4 per la rotazione successiva
-            currentIndex = (currentIndex + 4) % allMessages.length;
         }
+
+        function nextQuadrants() {
+            currentIndex = (currentIndex + 4) % allMessages.length;
+            renderQuadrants();
+        }
+
+        function prevQuadrants() {
+            currentIndex = (currentIndex - 4 + allMessages.length) % allMessages.length;
+            renderQuadrants();
+        }
+
+        function startAutoRotate() {
+            if (autoRotateInterval) clearInterval(autoRotateInterval);
+            autoRotateInterval = setInterval(() => {
+                if (!isPaused && allMessages.length > 4) {
+                    nextQuadrants();
+                }
+            }, 10000);
+        }
+
+        // ELEMENTI INTERFACCIA CONTROLLO
+        const pauseBtn = document.getElementById('pauseBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        pauseBtn.addEventListener('click', () => {
+            isPaused = !isPaused;
+            pauseBtn.innerText = isPaused ? '▶' : '⏸';
+            pauseBtn.title = isPaused ? 'Riprendi Scorrimento' : 'Metti in Pausa';
+        });
+
+        prevBtn.addEventListener('click', () => {
+            prevQuadrants();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            nextQuadrants();
+        });
 
         fetch('testimonianze.json')
             .then(response => response.json())
             .then(data => {
                 allMessages = data;
                 renderQuadrants();
-
-                // Se ci sono più di 4 messaggi, ruota la griglia ogni 10 secondi
-                if (allMessages.length > 4) {
-                    setInterval(renderQuadrants, 10000);
-                }
+                startAutoRotate();
             })
             .catch(error => {
                 console.error("Errore nel caricamento delle testimonianze:", error);
