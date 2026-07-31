@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>Mielangelami - Gestione Mielemessaggi</title>
+    <style>
+        body { font-family: system-ui, sans-serif; background: #fffbeb; color: #451a03; padding: 30px; max-width: 600px; margin: 0 auto; }
+        .card { background: white; padding: 20px; border-radius: 16px; border: 2px solid #fcd34d; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        label { font-weight: bold; display: block; margin-top: 15px; }
+        input, textarea { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #fcd34d; border-radius: 8px; box-sizing: border-box; }
+        button { background: #f59e0b; color: white; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 15px; width: 100%; }
+        button:hover { background: #d97706; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>🍯 Aggiungi Mielemessaggio</h2>
+        <p>Incolla qui il messaggio ricevuto per scaricare il file JSON aggiornato.</p>
+        
+        <label>File `testimonianze.json` attuale:</label>
+        <input type="file" id="jsonFileInput" accept=".json">
+
+        <label>Nome / Autore (es: Marco R. o Cliente Sostenitore):</label>
+        <input type="text" id="autoreInput" placeholder="Anonimo 🐝">
+
+        <label>Testo del Mielemessaggio:</label>
+        <textarea id="testoInput" rows="4" placeholder="Incolla il testo qui..."></textarea>
+
+        <button onclick="aggiungiEScarica()">Aggiungi e Scarica testimonianze.json 📥</button>
+    </div>
+
+    <script>
+        let currentData = [];
+
+        document.getElementById('jsonFileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    currentData = JSON.parse(e.target.result);
+                    alert("File JSON attuale caricato con successo!");
+                } catch(err) {
+                    alert("Errore nella lettura del JSON.");
+                }
+            };
+            reader.readAsText(file);
+        });
+
+        function aggiungiEScarica() {
+            const testo = document.getElementById('testoInput').value.trim();
+            const autore = document.getElementById('autoreInput').value.trim() || "Cliente Sostenitore 🐝";
+
+            if (!testo) {
+                alert("Inserisci prima il testo del messaggio!");
+                return;
+            }
+
+            // Aggiunge in cima alla lista
+            currentData.unshift({ testo: testo, autore: autore });
+
+            // Genera il file da scaricare
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(currentData, null, 4));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", "testimonianze.json");
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+
+            // Pulisce i campi
+            document.getElementById('testoInput').value = '';
+            document.getElementById('autoreInput').value = '';
+        }
+    </script>
+</body>
+</html>
