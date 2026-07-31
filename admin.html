@@ -2,34 +2,213 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>Mielangelami - Gestione Mielemessaggi</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mielangelami | Pannello Gestione</title>
     <style>
-        body { font-family: system-ui, sans-serif; background: #fffbeb; color: #451a03; padding: 30px; max-width: 600px; margin: 0 auto; }
-        .card { background: white; padding: 20px; border-radius: 16px; border: 2px solid #fcd34d; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        label { font-weight: bold; display: block; margin-top: 15px; }
-        input, textarea { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #fcd34d; border-radius: 8px; box-sizing: border-box; }
-        button { background: #f59e0b; color: white; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 15px; width: 100%; }
-        button:hover { background: #d97706; }
+        :root {
+            --primary: #f59e0b;
+            --primary-dark: #d97706;
+            --bg: #fffbeb;
+            --text: #451a03;
+            --card-bg: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 20px;
+            border: 2px solid #fde68a;
+            box-shadow: 0 10px 30px rgba(120, 53, 15, 0.08);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            color: var(--text);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        p.subtitle {
+            font-size: 0.88rem;
+            color: #78350f;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            color: var(--text);
+        }
+
+        input[type="text"], 
+        input[type="password"], 
+        textarea {
+            width: 100%;
+            padding: 11px;
+            border: 2px solid #fcd34d;
+            border-radius: 10px;
+            background-color: #fffdf5;
+            font-family: inherit;
+            font-size: 0.9rem;
+            color: var(--text);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, textarea:focus {
+            border-color: var(--primary-dark);
+        }
+
+        textarea {
+            resize: vertical;
+            height: 90px;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.2s;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .error-message {
+            display: none;
+            color: #dc2626;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            margin-top: 15px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        /* Gestione viste */
+        #dashboardView {
+            display: none;
+        }
+
+        .file-input-wrapper {
+            background: #fffdf5;
+            border: 2px dashed #fcd34d;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h2>🍯 Aggiungi Mielemessaggio</h2>
-        <p>Incolla qui il messaggio ricevuto per scaricare il file JSON aggiornato.</p>
+
+    <!-- SCHERMATA LOGIN -->
+    <div class="card" id="loginView">
+        <h2>🍯 Area Riservata Admin</h2>
+        <p class="subtitle">Inserisci le tue credenziali per gestire i Mielemessaggi</p>
+
+        <form id="loginForm">
+            <div>
+                <label for="username">Nome Utente</label>
+                <input type="text" id="username" placeholder="Es. agosto" required>
+            </div>
+            <div>
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="••••••••" required>
+            </div>
+
+            <div id="loginError" class="error-message">
+                Credenziali errate! Controlla utente o password.
+            </div>
+
+            <button type="submit" class="btn">Accedi al Pannello 🔑</button>
+        </form>
+    </div>
+
+    <!-- SCHERMATA DASHBOARD (Nascosta finché non si fa il login) -->
+    <div class="card" id="dashboardView">
+        <h2>🐝 Gestione Mielemessaggi</h2>
+        <p class="subtitle">Aggiungi un nuovo messaggio per aggiornare il file JSON</p>
         
-        <label>File `testimonianze.json` attuale:</label>
-        <input type="file" id="jsonFileInput" accept=".json">
+        <div>
+            <label>1. Carica il file `testimonianze.json` attuale:</label>
+            <div class="file-input-wrapper">
+                <input type="file" id="jsonFileInput" accept=".json">
+            </div>
+        </div>
 
-        <label>Nome / Autore (es: Marco R. o Cliente Sostenitore):</label>
-        <input type="text" id="autoreInput" placeholder="Anonimo 🐝">
+        <div>
+            <label for="autoreInput">2. Nome / Autore del messaggio:</label>
+            <input type="text" id="autoreInput" placeholder="Es. Marco R. oppure Cliente Sostenitore 🐝">
+        </div>
 
-        <label>Testo del Mielemessaggio:</label>
-        <textarea id="testoInput" rows="4" placeholder="Incolla il testo qui..."></textarea>
+        <div>
+            <label for="testoInput">3. Testo del Mielemessaggio:</label>
+            <textarea id="testoInput" placeholder="Incolla il testo del messaggio ricevuto..."></textarea>
+        </div>
 
-        <button onclick="aggiungiEScarica()">Aggiungi e Scarica testimonianze.json 📥</button>
+        <button onclick="aggiungiEScarica()" class="btn">Aggiungi e Scarica testimonianze.json 📥</button>
     </div>
 
     <script>
+        // LOGICA DI AUTENTICAZIONE FINTA
+        const loginForm = document.getElementById('loginForm');
+        const loginView = document.getElementById('loginView');
+        const dashboardView = document.getElementById('dashboardView');
+        const loginError = document.getElementById('loginError');
+
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value.trim();
+
+            // Verifica credenziali richieste
+            if (user === 'agosto' && pass === 'mucca97') {
+                loginError.style.display = 'none';
+                loginView.style.display = 'none';
+                dashboardView.style.display = 'block';
+            } else {
+                loginError.style.display = 'block';
+            }
+        });
+
+        // LOGICA DI GESTIONE DEL JSON
         let currentData = [];
 
         document.getElementById('jsonFileInput').addEventListener('change', function(e) {
@@ -39,9 +218,9 @@
             reader.onload = function(e) {
                 try {
                     currentData = JSON.parse(e.target.result);
-                    alert("File JSON attuale caricato con successo!");
+                    alert("File JSON caricato con successo! Trovati " + currentData.length + " messaggi.");
                 } catch(err) {
-                    alert("Errore nella lettura del JSON.");
+                    alert("Errore nella lettura del file JSON.");
                 }
             };
             reader.readAsText(file);
@@ -56,10 +235,10 @@
                 return;
             }
 
-            // Aggiunge in cima alla lista
+            // Inserisce in cima alla lista
             currentData.unshift({ testo: testo, autore: autore });
 
-            // Genera il file da scaricare
+            // Genera il file per il download
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(currentData, null, 4));
             const downloadAnchor = document.createElement('a');
             downloadAnchor.setAttribute("href", dataStr);
@@ -68,9 +247,10 @@
             downloadAnchor.click();
             downloadAnchor.remove();
 
-            // Pulisce i campi
+            // Pulisce i campi di testo
             document.getElementById('testoInput').value = '';
             document.getElementById('autoreInput').value = '';
+            alert("File 'testimonianze.json' generato e scaricato! Ora puoi caricarlo su GitHub.");
         }
     </script>
 </body>
