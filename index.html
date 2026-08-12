@@ -362,10 +362,10 @@
                 <h3>Inviaci un mielemessaggio!</h3>
                 <p>Lascia un pensiero: riceverai subito un <strong>coupon del 25%</strong> per il lancio!</p>
                 
-                <form id="mieleForm" action="https://formspree.io/f/mnjkzwjb" method="POST">
+                <form id="mieleForm">
                     <div class="form-group">
                         <label for="email">La tua Email</label>
-                        <input type="email" id="email" name="_replyto" placeholder="esempio@email.com" required>
+                        <input type="email" id="email" name="email" placeholder="esempio@email.com" required>
                     </div>
                     <div class="form-group">
                         <label for="messaggio">Il tuo Mielemessaggio 🐝</label>
@@ -442,7 +442,6 @@
                     <span class="author">- ${item.autore}</span>
                 `;
                 
-                // Pausa temporanea quando il cursore va su un singolo messaggio
                 card.addEventListener('mouseenter', () => { isPaused = true; });
                 card.addEventListener('mouseleave', () => { 
                     if (pauseBtn.innerText === 'PAUSA') isPaused = false; 
@@ -471,7 +470,6 @@
             }, 10000);
         }
 
-        // ELEMENTI INTERFACCIA CONTROLLO CLASSICI
         const pauseBtn = document.getElementById('pauseBtn');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
@@ -500,36 +498,52 @@
                 console.error("Errore nel caricamento delle testimonianze:", error);
             });
 
-        // LOGICA FORM FORMSPREE
+        // LOGICA INVIO DIRETTO A TELEGRAM
         const form = document.getElementById('mieleForm');
         const successBox = document.getElementById('successBox');
         const submitBtn = document.getElementById('submitBtn');
+
+        // Configurazione Bot Telegram
+        const TELEGRAM_BOT_TOKEN = "8654752488:AAFBN_Hz1Wv9qy-krWrnRmu96xLM6daNd3M";
+        const TELEGRAM_CHAT_ID = "-1005409795034";
 
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             submitBtn.innerText = "Invio in corso...";
             submitBtn.disabled = true;
 
-            const formData = new FormData(form);
+            const email = document.getElementById('email').value;
+            const messaggio = document.getElementById('messaggio').value;
 
-            fetch(form.action, {
+            // Testo formattato per il messaggio Telegram
+            const text = `🍯 *Nuovo Mielemessaggio Ricevuto!*\n\n📧 *Email:* ${email}\n💬 *Messaggio:* ${messaggio}`;
+
+            const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+
+            fetch(url, {
                 method: 'POST',
-                body: formData,
                 headers: {
-                    'Accept': 'application/json'
-                }
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    chat_id: TELEGRAM_CHAT_ID,
+                    text: text,
+                    parse_mode: 'Markdown'
+                })
             })
-            .then(response => {
-                if (response.ok) {
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
                     form.style.display = 'none';
                     successBox.style.display = 'block';
                 } else {
-                    alert("Ops! C'è stato un problema con l'invio. Riprova tra poco.");
+                    alert("Ops! C'è stato un problema con l'invio su Telegram. Riprova tra poco.");
                     submitBtn.innerText = "Invia & Ricevi il 25%";
                     submitBtn.disabled = false;
                 }
             })
             .catch(error => {
+                console.error("Errore Telegram:", error);
                 alert("Ops! Errore di connessione. Riprova tra poco.");
                 submitBtn.innerText = "Invia & Ricevi il 25%";
                 submitBtn.disabled = false;
