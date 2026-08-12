@@ -498,14 +498,10 @@
                 console.error("Errore nel caricamento delle testimonianze:", error);
             });
 
-        // LOGICA INVIO DIRETTO A TELEGRAM
+        // LOGICA INVIO SICURO TRAMITE WORKER CLOUDFLARE
         const form = document.getElementById('mieleForm');
         const successBox = document.getElementById('successBox');
         const submitBtn = document.getElementById('submitBtn');
-
-        // Configurazione Bot Telegram
-        const TELEGRAM_BOT_TOKEN = "8654752488:AAFBN_Hz1Wv9qy-krWrnRmu96xLM6daNd3M";
-        const TELEGRAM_CHAT_ID = "-5409795034";
 
         form.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -515,35 +511,27 @@
             const email = document.getElementById('email').value;
             const messaggio = document.getElementById('messaggio').value;
 
-            // Testo formattato per il messaggio Telegram
-            const text = `🍯 *Nuovo Mielemessaggio Ricevuto!*\n\n📧 *Email:* ${email}\n💬 *Messaggio:* ${messaggio}`;
-
-            const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-
-            fetch(url, {
+            // Puntiamo direttamente all'URL del tuo Worker Cloudflare
+            fetch('https://mielangelami.agosto.workers.dev', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    chat_id: TELEGRAM_CHAT_ID,
-                    text: text,
-                    parse_mode: 'Markdown'
-                })
+                body: JSON.stringify({ email, messaggio })
             })
             .then(response => response.json())
             .then(data => {
-                if (data.ok) {
+                if (data.success) {
                     form.style.display = 'none';
                     successBox.style.display = 'block';
                 } else {
-                    alert("Ops! C'è stato un problema con l'invio su Telegram. Riprova tra poco.");
+                    alert("Ops! C'è stato un problema. Riprova tra poco.");
                     submitBtn.innerText = "Invia & Ricevi il 25%";
                     submitBtn.disabled = false;
                 }
             })
             .catch(error => {
-                console.error("Errore Telegram:", error);
+                console.error("Errore:", error);
                 alert("Ops! Errore di connessione. Riprova tra poco.");
                 submitBtn.innerText = "Invia & Ricevi il 25%";
                 submitBtn.disabled = false;
