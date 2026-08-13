@@ -216,7 +216,7 @@
             <textarea id="testoInput" placeholder="Incolla il testo del messaggio ricevuto..."></textarea>
         </div>
 
-        <button onclick="aggiungiMessaggio()" class="btn btn-secondary">+ Aggiungi alla lista ➕</button>
+        <button type="button" onclick="aggiungiMessaggio()" class="btn btn-secondary">+ Aggiungi alla lista ➕</button>
 
         <!-- Anteprima messaggi caricati/aggiunti -->
         <div>
@@ -226,7 +226,7 @@
             </div>
         </div>
 
-        <button onclick="scaricaJson()" class="btn btn-download">Scarica testimonianze.json 📥</button>
+        <button type="button" onclick="scaricaJson()" class="btn btn-download">Scarica testimonianze.json 📥</button>
     </div>
 
     <script>
@@ -259,26 +259,40 @@
 
         // CARICAMENTO AUTOMATICO DEL FILE JSON
         async function caricaJsonIniziale() {
-            // Prova prima in locale, poi eventualmente dall'URL assoluto
-            const urlJSON = 'testimonianze.json'; // O puoi usare 'https://mielangelami.com/testimonianze.json'
+            // Prova prima lo stesso percorso, se fallisce prova l'URL completo
+            const urlsToTry = [
+                'testimonianze.json',
+                'https://mielangelami.com/testimonianze.json'
+            ];
 
-            try {
-                const response = await fetch(urlJSON, { cache: "no-store" });
-                if (!response.ok) throw new Error("File non trovato");
-                
-                currentData = await response.json();
+            let loaded = false;
+
+            for (const url of urlsToTry) {
+                try {
+                    const response = await fetch(url, { cache: "no-store" });
+                    if (response.ok) {
+                        currentData = await response.json();
+                        loaded = true;
+                        break;
+                    }
+                } catch (err) {
+                    console.warn("Fallito tentativo caricamento da: " + url, err);
+                }
+            }
+
+            if (loaded) {
                 statusBox.style.backgroundColor = "#d1fae5";
                 statusBox.style.color = "#065f46";
                 statusBox.style.borderColor = "#a7f3d0";
                 statusBox.innerHTML = `✅ File caricato con successo! Presenti <strong>${currentData.length}</strong> messaggi.`;
-            } catch (error) {
-                console.warn("Impossibile caricare direttamente il JSON, creo un file vuoto.", error);
+            } else {
                 statusBox.style.backgroundColor = "#fef2f2";
                 statusBox.style.color = "#991b1b";
                 statusBox.style.borderColor = "#fecaca";
-                statusBox.innerHTML = `⚠️ Impossibile recuperare <code>testimonianze.json</code> automatico (CORS o file mancante). Inizieremo con una lista vuota o puoi aggiungere nuovi messaggi.`;
+                statusBox.innerHTML = `⚠️ Impossibile recuperare <code>testimonianze.json</code> esistente (blocco CORS o file non presente). Puoi comunque inserire nuovi messaggi e scaricare il file.`;
                 currentData = [];
             }
+
             aggiornaAnteprima();
         }
 
@@ -321,22 +335,34 @@
             `).join('');
         }
 
-        // SCARICA IL FILE JSON
+        // SCARICA IL FILE JSON (Fixato usando Blob e Blob URL)
         function scaricaJson() {
             if (currentData.length === 0) {
                 alert("Non ci sono messaggi da scaricare!");
                 return;
             }
 
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(currentData, null, 4));
-            const downloadAnchor = document.createElement('a');
-            downloadAnchor.setAttribute("href", dataStr);
-            downloadAnchor.setAttribute("download", "testimonianze.json");
-            document.body.appendChild(downloadAnchor);
-            downloadAnchor.click();
-            downloadAnchor.remove();
+            try {
+                const jsonContent = JSON.stringify(currentData, null, 4);
+                const blob = new Blob([jsonContent], { type: 'application/json;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
 
-            alert("File 'testimonianze.json' scaricato con successo!");
+                const downloadAnchor = document.createElement('a');
+                downloadAnchor.href = url;
+                downloadAnchor.setAttribute("download", "testimonianze.json");
+                document.body.appendChild(downloadAnchor);
+                
+                downloadAnchor.click();
+
+                // Pulizia
+                setTimeout(() => {
+                    document.body.removeChild(downloadAnchor);
+                    URL.revokeObjectURL(url);
+                }, 100);
+
+            } catch (err) {
+                alert("Errore durante la creazione del file di download: " + err.message);
+            }
         }
 
         // Utility per evitare problemi con caratteri HTML speciali
@@ -346,4 +372,3 @@
     </script>
 </body>
 </html>
-
