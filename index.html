@@ -202,7 +202,7 @@
             color: var(--primary-dark);
         }
 
-        /* NUOVA NAVIGAZIONE CLASSICA (Pulsanti Freccia Minimal) */
+        /* NAVIGAZIONE CLASSICA */
         .controls-wrapper {
             display: flex;
             align-items: center;
@@ -297,10 +297,22 @@
             font-weight: 500;
             white-space: pre-line;
             line-height: 1.4;
-            overflow: hidden;
-            display: -webkit-box;
-            -webkit-line-clamp: 6;
-            -webkit-box-orient: vertical;
+            max-height: 120px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .quadrant-card .message-text::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .quadrant-card .message-text::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        .quadrant-card .message-text::-webkit-scrollbar-track {
+            background: #fef3c7;
         }
 
         .quadrant-card .author {
@@ -511,7 +523,7 @@
             const email = document.getElementById('email').value;
             const messaggio = document.getElementById('messaggio').value;
 
-            // Puntiamo direttamente all'URL del tuo Worker Cloudflare
+            // URL del Worker Cloudflare
             fetch('https://mielangelami.agosto.workers.dev', {
                 method: 'POST',
                 headers: {
