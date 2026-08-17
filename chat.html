@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Live Chat - Mielangela</title>
+  <title>Mielangelami Live</title>
   <style>
     :root {
       --primary-color: #d97706;
@@ -11,7 +11,7 @@
       --bg-color: #fef3c7;
       --chat-bg: #ffffff;
       --visitor-msg: #f3f4f6;
-      --admin-msg: #fef3c7;
+      --staff-msg: #fef3c7;
       --border-color: #fde68a;
       --text-main: #1f2937;
     }
@@ -92,9 +92,9 @@
       border-bottom-left-radius: 2px;
     }
 
-    .chat-bubble.admin {
+    .chat-bubble.staff {
       align-self: flex-end;
-      background: var(--admin-msg);
+      background: var(--staff-msg);
       color: #78350f;
       border: 1px solid var(--border-color);
       border-bottom-right-radius: 2px;
@@ -168,14 +168,12 @@
     <div class="chat-header">
       <span style="font-size: 1.5rem;">🐝</span>
       <div>
-        <h2>Mielangela Live Chat</h2>
-        <div class="status">Rispondiamo il prima possibile</div>
+        <h2>Mielangelami Live</h2>
+        <div class="status" id="user-badge">Inizializzazione...</div>
       </div>
     </div>
 
-    <div class="chat-messages" id="chat-messages">
-      <!-- I messaggi verranno caricati qui -->
-    </div>
+    <div class="chat-messages" id="chat-messages"></div>
 
     <form class="chat-footer" id="chat-form">
       <input 
@@ -199,31 +197,44 @@
     const messagesContainer = document.getElementById('chat-messages');
     const chatForm = document.getElementById('chat-form');
     const chatInput = document.getElementById('chat-input');
+    const userBadge = document.getElementById('user-badge');
 
-    // Sanitizzazione stringhe HTML contro attacchi XSS
+    // Generazione nome casuale ape per il visitatore
+    function generaNomeApe() {
+      const ruoli = ['Operaia', 'Esploratrice', 'Nutrice', 'Guardiana', 'Architecta', 'Svolazzante'];
+      const ruolo = ruoli[Math.floor(Math.random() * ruoli.length)];
+      const numero = Math.floor(Math.random() * 900) + 100;
+      return `Ape ${ruolo} #${numero}`;
+    }
+
+    // Recupa o imposta il nome della sessione
+    let mioNomeApe = sessionStorage.getItem('mioNomeApe');
+    if (!mioNomeApe) {
+      mioNomeApe = generaNomeApe();
+      sessionStorage.setItem('mioNomeApe', mioNomeApe);
+    }
+    userBadge.textContent = `Tu sei: ${mioNomeApe}`;
+
     function escapeHtml(str) {
       return str.replace(/[&<>"']/g, function(m) {
         return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
       });
     }
 
-    // Scarica la cronologia messaggi dal Worker
     async function caricaMessaggi() {
       try {
         const response = await fetch(WORKER_URL);
         if (!response.ok) return;
 
         const messages = await response.json();
-        
-        // Mantieni lo scroll se l'utente sta leggendo in alto
         const isAtBottom = messagesContainer.scrollHeight - messagesContainer.scrollTop <= messagesContainer.clientHeight + 50;
 
         messagesContainer.innerHTML = '';
 
         messages.forEach(msg => {
-          const isAdmin = msg.autore === 'Ape Regina 🐝';
+          const isStaff = msg.type === 'staff';
           const bubble = document.createElement('div');
-          bubble.className = `chat-bubble ${isAdmin ? 'admin' : 'visitor'}`;
+          bubble.className = `chat-bubble ${isStaff ? 'staff' : 'visitor'}`;
           
           bubble.innerHTML = `
             <div class="msg-meta">
@@ -240,11 +251,10 @@
           messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
       } catch (err) {
-        console.error('Errore durante il recupero dei messaggi:', err);
+        console.error('Errore durante il recupero messaggi:', err);
       }
     }
 
-    // Invia un nuovo messaggio
     chatForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const testo = chatInput.value.trim();
@@ -256,7 +266,7 @@
         const res = await fetch(WORKER_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ messaggio: testo, autore: 'Visitatore' })
+          body: JSON.stringify({ messaggio: testo, autore: mioNomeApe })
         });
 
         if (res.ok) {
@@ -268,7 +278,6 @@
       }
     });
 
-    // Avvio e Polling automatico ogni 3 secondi
     caricaMessaggi();
     setInterval(caricaMessaggi, 3000);
   </script>
