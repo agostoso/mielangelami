@@ -8,11 +8,9 @@
     :root {
       --primary-color: #d97706;
       --primary-hover: #b45309;
-      --bg-color: #fef3c7;
+      --bg-color: #fefce8;
       --chat-bg: #ffffff;
-      --visitor-msg: #f3f4f6;
-      --staff-msg: #fef3c7;
-      --border-color: #fde68a;
+      --border-color: #fef08a;
       --text-main: #1f2937;
     }
 
@@ -38,7 +36,7 @@
       height: 600px;
       background: var(--chat-bg);
       border-radius: 16px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
       display: flex;
       flex-direction: column;
       overflow: hidden;
@@ -61,7 +59,7 @@
 
     .chat-header .status {
       font-size: 0.8rem;
-      opacity: 0.9;
+      opacity: 0.95;
     }
 
     .chat-messages {
@@ -77,26 +75,27 @@
     .chat-bubble {
       max-width: 80%;
       padding: 10px 14px;
-      border-radius: 12px;
+      border-radius: 14px;
       font-size: 0.95rem;
       line-height: 1.4;
       word-break: break-word;
       display: flex;
       flex-direction: column;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      border: 1px solid rgba(0,0,0,0.05);
     }
 
     .chat-bubble.visitor {
       align-self: flex-start;
-      background: var(--visitor-msg);
-      color: var(--text-main);
+      color: #374151;
       border-bottom-left-radius: 2px;
     }
 
     .chat-bubble.staff {
       align-self: flex-end;
-      background: var(--staff-msg);
+      background-color: #fef3c7;
       color: #78350f;
-      border: 1px solid var(--border-color);
+      border: 1px solid #fde68a;
       border-bottom-right-radius: 2px;
     }
 
@@ -106,8 +105,8 @@
       gap: 8px;
       font-size: 0.75rem;
       margin-bottom: 4px;
-      opacity: 0.75;
-      font-weight: 600;
+      opacity: 0.8;
+      font-weight: 700;
     }
 
     .msg-text {
@@ -199,20 +198,41 @@
     const chatInput = document.getElementById('chat-input');
     const userBadge = document.getElementById('user-badge');
 
-    // Generazione nome casuale ape per il visitatore
+    // Genera sfumatura di giallo basata sul nome dell'ape (HSL)
+    function calcolaSfumaturaGiallo(nome) {
+      let hash = 0;
+      for (let i = 0; i < nome.length; i++) {
+        hash = nome.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      // Hue tra 42 (Giallo caldo/Ambra) e 56 (Giallo limone chiaro)
+      const hue = 42 + (Math.abs(hash) % 15);
+      // Saturation tra 80% e 100%
+      const saturation = 80 + (Math.abs(hash >> 2) % 20);
+      // Lightness tra 78% e 88% per mantenere lo sfondo chiaro e ben leggibile
+      const lightness = 78 + (Math.abs(hash >> 4) % 10);
+
+      return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+    }
+
+    // Generatore di nome ape casuale
     function generaNomeApe() {
-      const ruoli = ['Operaia', 'Esploratrice', 'Nutrice', 'Guardiana', 'Architecta', 'Svolazzante'];
+      const ruoli = ['Operaia', 'Esploratrice', 'Nutrice', 'Guardiana', 'Architecta', 'Svolazzante', 'Melissera'];
       const ruolo = ruoli[Math.floor(Math.random() * ruoli.length)];
       const numero = Math.floor(Math.random() * 900) + 100;
       return `Ape ${ruolo} #${numero}`;
     }
 
-    // Recupa o imposta il nome della sessione
+    // Gestione Sessione Utente
     let mioNomeApe = sessionStorage.getItem('mioNomeApe');
+    let mioColoreApe = sessionStorage.getItem('mioColoreApe');
+
     if (!mioNomeApe) {
       mioNomeApe = generaNomeApe();
+      mioColoreApe = calcolaSfumaturaGiallo(mioNomeApe);
       sessionStorage.setItem('mioNomeApe', mioNomeApe);
+      sessionStorage.setItem('mioColoreApe', mioColoreApe);
     }
+
     userBadge.textContent = `Tu sei: ${mioNomeApe}`;
 
     function escapeHtml(str) {
@@ -236,6 +256,10 @@
           const bubble = document.createElement('div');
           bubble.className = `chat-bubble ${isStaff ? 'staff' : 'visitor'}`;
           
+          // Imposta lo sfondo giallo unico personalizzato se messaggio visitatore
+          const bgStyle = isStaff ? '' : `background-color: ${msg.colore || calcolaSfumaturaGiallo(msg.autore)};`;
+          bubble.setAttribute('style', bgStyle);
+
           bubble.innerHTML = `
             <div class="msg-meta">
               <span>${escapeHtml(msg.autore)}</span>
@@ -266,7 +290,11 @@
         const res = await fetch(WORKER_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ messaggio: testo, autore: mioNomeApe })
+          body: JSON.stringify({ 
+            messaggio: testo, 
+            autore: mioNomeApe,
+            colore: mioColoreApe
+          })
         });
 
         if (res.ok) {
