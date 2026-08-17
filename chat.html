@@ -72,6 +72,16 @@
       background: #fafafa;
     }
 
+    .auto-clean-notice {
+      text-align: center;
+      font-size: 0.75rem;
+      color: #9ca3af;
+      background: #f3f4f6;
+      padding: 6px 12px;
+      border-radius: 12px;
+      margin-bottom: 8px;
+    }
+
     .chat-bubble {
       max-width: 80%;
       padding: 10px 14px;
@@ -198,23 +208,20 @@
     const chatInput = document.getElementById('chat-input');
     const userBadge = document.getElementById('user-badge');
 
-    // Genera sfumatura di giallo basata sul nome dell'ape (HSL)
+    // Calcola una sfumatura di giallo unica (HSL) basata sul nome
     function calcolaSfumaturaGiallo(nome) {
       let hash = 0;
       for (let i = 0; i < nome.length; i++) {
         hash = nome.charCodeAt(i) + ((hash << 5) - hash);
       }
-      // Hue tra 42 (Giallo caldo/Ambra) e 56 (Giallo limone chiaro)
       const hue = 42 + (Math.abs(hash) % 15);
-      // Saturation tra 80% e 100%
       const saturation = 80 + (Math.abs(hash >> 2) % 20);
-      // Lightness tra 78% e 88% per mantenere lo sfondo chiaro e ben leggibile
       const lightness = 78 + (Math.abs(hash >> 4) % 10);
 
       return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
     }
 
-    // Generatore di nome ape casuale
+    // Generatore di nome casuale ape
     function generaNomeApe() {
       const ruoli = ['Operaia', 'Esploratrice', 'Nutrice', 'Guardiana', 'Architecta', 'Svolazzante', 'Melissera'];
       const ruolo = ruoli[Math.floor(Math.random() * ruoli.length)];
@@ -249,14 +256,17 @@
         const messages = await response.json();
         const isAtBottom = messagesContainer.scrollHeight - messagesContainer.scrollTop <= messagesContainer.clientHeight + 50;
 
-        messagesContainer.innerHTML = '';
+        messagesContainer.innerHTML = `
+          <div class="auto-clean-notice">
+            🧹 I messaggi si puliscono automaticamente ogni ora per tutelare la privacy.
+          </div>
+        `;
 
         messages.forEach(msg => {
           const isStaff = msg.type === 'staff';
           const bubble = document.createElement('div');
           bubble.className = `chat-bubble ${isStaff ? 'staff' : 'visitor'}`;
           
-          // Imposta lo sfondo giallo unico personalizzato se messaggio visitatore
           const bgStyle = isStaff ? '' : `background-color: ${msg.colore || calcolaSfumaturaGiallo(msg.autore)};`;
           bubble.setAttribute('style', bgStyle);
 
