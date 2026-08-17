@@ -528,9 +528,9 @@
 
     <!-- WIDGET CHAT FLUTTUANTE A FORMA DI APE -->
     <div id="bee-chat-widget">
-      <!-- Finestra della Chat (Iframe) -->
+      <!-- Finestra della Chat (Iframe verso Worker mielelivechat) -->
       <div id="bee-chat-container" class="bee-chat-hidden">
-        <iframe src="chat.html" id="bee-chat-iframe" title="Mielangelami Live Chat"></iframe>
+        <iframe src="https://mielangelamichat.agosto.workers.dev/" id="bee-chat-iframe" title="Mielangelami Live Chat"></iframe>
       </div>
 
       <!-- Pulsante Ape per Aprire/Chiudere -->
@@ -620,7 +620,7 @@
                 console.error("Errore nel caricamento delle testimonianze:", error);
             });
 
-        // LOGICA INVIO SICURO TRAMITE WORKER CLOUDFLARE
+        // LOGICA INVIO SICURO TRAMITE WORKER CLOUDFLARE (mielemessaggi)
         const form = document.getElementById('mieleForm');
         const successBox = document.getElementById('successBox');
         const submitBtn = document.getElementById('submitBtn');
@@ -633,8 +633,7 @@
             const email = document.getElementById('email').value;
             const messaggio = document.getElementById('messaggio').value;
 
-            // URL del Worker Cloudflare
-            fetch('https://mielangelami.agosto.workers.dev', {
+            fetch('https://mielangelami.agosto.workers.dev/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
