@@ -354,6 +354,102 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* STILI CSS PER IL WIDGET CHAT APE */
+        #bee-chat-widget {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        /* Pulsante Ape Fluttuante */
+        #bee-chat-button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #d97706;
+            border: 3px solid #fef08a;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+            position: relative;
+            padding: 0;
+        }
+
+        #bee-chat-button:hover {
+            transform: scale(1.08);
+            background-color: #b45309;
+        }
+
+        #bee-chat-button .bee-icon {
+            font-size: 30px;
+            line-height: 1;
+            display: block;
+        }
+
+        #bee-chat-button .bee-close-icon {
+            font-size: 32px;
+            color: white;
+            line-height: 1;
+            display: none;
+            font-weight: bold;
+        }
+
+        /* Stato aperto del pulsante */
+        #bee-chat-widget.active #bee-chat-button .bee-icon {
+            display: none;
+        }
+        #bee-chat-widget.active #bee-chat-button .bee-close-icon {
+            display: block;
+        }
+
+        /* Contenitore Iframe Chat */
+        #bee-chat-container {
+            width: 380px;
+            height: 520px;
+            margin-bottom: 12px;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transform-origin: bottom right;
+            border: 1px solid #fde68a;
+            background: #ffffff;
+        }
+
+        #bee-chat-container.bee-chat-hidden {
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0.8) translateY(20px);
+            pointer-events: none;
+        }
+
+        #bee-chat-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Adattamento per dispositivi mobili per il Widget Chat */
+        @media (max-width: 480px) {
+            #bee-chat-widget {
+                bottom: 16px;
+                right: 16px;
+            }
+            #bee-chat-container {
+                width: calc(100vw - 32px);
+                height: 75vh;
+                max-height: 500px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -428,6 +524,20 @@
 
     <div class="footer">
         &copy; 2019-2026 Mielangelami. www.mielangelami.com — Mangiami, Il Miele Buono. Ti amo Angelina ❤️
+    </div>
+
+    <!-- WIDGET CHAT FLUTTUANTE A FORMA DI APE -->
+    <div id="bee-chat-widget">
+      <!-- Finestra della Chat (Iframe) -->
+      <div id="bee-chat-container" class="bee-chat-hidden">
+        <iframe src="chat.html" id="bee-chat-iframe" title="Mielangelami Live Chat"></iframe>
+      </div>
+
+      <!-- Pulsante Ape per Aprire/Chiudere -->
+      <button id="bee-chat-button" aria-label="Apri chat Mielangelami Live">
+        <span class="bee-icon">🐝</span>
+        <span class="bee-close-icon">&times;</span>
+      </button>
     </div>
 
     <script>
@@ -549,6 +659,18 @@
                 submitBtn.disabled = false;
             });
         });
+
+        // SCRIPT GESTIONE APERTURA/CHIUSURA CHAT WIDGET
+        (function() {
+            const widget = document.getElementById('bee-chat-widget');
+            const btn = document.getElementById('bee-chat-button');
+            const container = document.getElementById('bee-chat-container');
+
+            btn.addEventListener('click', () => {
+                widget.classList.toggle('active');
+                container.classList.toggle('bee-chat-hidden');
+            });
+        })();
     </script>
 </body>
 </html>
