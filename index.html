@@ -14,11 +14,7 @@
             --card-bg: #ffffff;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -29,647 +25,147 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             padding: 20px;
         }
 
-        /* LAYOUT ORIZZONTALE PRINCIPALE */
         .main-wrapper {
             display: flex;
             flex-direction: row;
             align-items: stretch;
             justify-content: center;
-            gap: 25px;
-            max-width: 1250px;
+            gap: 30px;
+            max-width: 1300px;
             width: 100%;
             margin: auto;
         }
 
-        /* COLONNA DI SINISTRA: LOGO + FORM */
         .sidebar-left {
             flex: 0 0 380px;
             background: rgba(255, 255, 255, 0.9);
             border-radius: 24px;
-            padding: 25px 20px;
-            box-shadow: 0 10px 30px rgba(120, 53, 15, 0.06);
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(120, 53, 15, 0.1);
             border: 2px solid #fef3c7;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
         }
 
-        .header-brand {
-            text-align: center;
-            margin-bottom: 15px;
-        }
-
-        .logo-container {
-            width: 90px;
-            height: 90px;
-            margin: 0 auto 10px auto;
-            animation: beeBuzz 4s ease-in-out infinite;
-        }
-
-        .logo-img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            border-radius: 50%;
-        }
+        .header-brand { text-align: center; margin-bottom: 25px; }
+        .logo-container { width: 100px; height: 100px; margin: 0 auto 15px auto; animation: beeBuzz 4s ease-in-out infinite; }
+        .logo-img { width: 100%; height: 100%; object-fit: contain; border-radius: 50%; }
 
         @keyframes beeBuzz {
-            0% { transform: translate(0, 0) rotate(0deg); }
-            15% { transform: translate(6px, -8px) rotate(4deg); }
-            30% { transform: translate(-5px, -12px) rotate(-5deg); }
-            45% { transform: translate(8px, -6px) rotate(6deg); }
-            60% { transform: translate(-6px, -10px) rotate(-3deg); }
-            75% { transform: translate(4px, -4px) rotate(2deg); }
-            100% { transform: translate(0, 0) rotate(0deg); }
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(0, -10px) rotate(5deg); }
         }
 
-        h1 {
-            font-size: 1.7rem;
-            color: #451a03;
-            font-weight: 800;
-            line-height: 1.1;
-        }
+        h1 { font-size: 1.8rem; color: #451a03; font-weight: 800; }
+        .tagline { font-size: 0.9rem; color: var(--text-light); font-weight: 600; }
 
-        .tagline {
-            font-size: 0.9rem;
-            color: var(--text-light);
-            font-weight: 600;
-        }
+        .form-group { margin-bottom: 15px; text-align: left; }
+        label { display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 5px; }
+        input[type="email"], textarea { width: 100%; padding: 12px; border: 2px solid #fcd34d; border-radius: 12px; background: #fffdf5; }
+        
+        .btn-miele { width: 100%; padding: 14px; background-color: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.3s; }
+        .btn-miele:hover { background-color: var(--primary-dark); }
 
-        .miele-box h3 {
-            font-size: 1.05rem;
-            margin-bottom: 6px;
-            color: #451a03;
-        }
+        /* SEZIONE LIVE */
+        .content-right { flex: 1; display: flex; flex-direction: column; }
+        .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+        .section-title { font-size: 1.1rem; font-weight: 900; text-transform: uppercase; color: var(--primary-dark); display: flex; align-items: center; gap: 10px; }
+        
+        .live-badge { background: #22c55e; color: white; font-size: 0.7rem; padding: 2px 8px; border-radius: 20px; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
-        .miele-box p {
-            font-size: 0.82rem;
-            color: var(--text-light);
-            margin-bottom: 12px;
-        }
+        .grid-quadrants { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; height: 100%; }
+        .quadrant-card { background: white; padding: 25px; border-radius: 20px; border: 2px solid #fde68a; box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; justify-content: space-between; }
+        .message-text { font-style: italic; color: #451a03; margin-bottom: 15px; font-size: 1rem; }
+        .author { font-weight: 800; color: var(--primary-dark); font-size: 0.8rem; text-align: right; }
 
-        .form-group {
-            margin-bottom: 10px;
-            text-align: left;
-        }
-
-        label {
-            display: block;
-            font-size: 0.78rem;
-            font-weight: 700;
-            margin-bottom: 4px;
-            color: #451a03;
-        }
-
-        input[type="email"], textarea {
-            width: 100%;
-            padding: 9px;
-            border: 2px solid #fcd34d;
-            border-radius: 10px;
-            background-color: #fffdf5;
-            font-family: inherit;
-            font-size: 0.85rem;
-            color: var(--text);
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        input[type="email"]:focus, textarea:focus {
-            border-color: var(--primary-dark);
-        }
-
-        textarea {
-            resize: vertical;
-            height: 60px;
-        }
-
-        .btn-miele {
-            display: block;
-            width: 100%;
-            padding: 11px;
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 0.9rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            text-align: center;
-        }
-
-        .btn-miele:hover {
-            background-color: var(--primary-dark);
-        }
-
-        .success-message {
-            display: none;
-            background: #ecfdf5;
-            color: #065f46;
-            padding: 12px;
-            border-radius: 10px;
-            border: 2px solid #a7f3d0;
-            text-align: center;
-            font-weight: 600;
-            font-size: 0.85rem;
-        }
-
-        /* SEZIONE DESTRO/CENTRALE: 4 QUADRANTI + CONTROLLI */
-        .content-right {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .section-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 15px;
-            padding: 0 5px;
-        }
-
-        .section-title {
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-weight: 800;
-            color: var(--primary-dark);
-        }
-
-        /* NAVIGAZIONE CLASSICA */
-        .controls-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .ctrl-btn {
-            background: transparent;
-            border: 1px solid #fcd34d;
-            color: var(--text-light);
-            border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
-            padding: 0;
-        }
-
-        .ctrl-btn svg {
-            width: 16px;
-            height: 16px;
-            fill: var(--text-light);
-            transition: fill 0.2s ease;
-        }
-
-        .ctrl-btn:hover {
-            background-color: var(--primary);
-            border-color: var(--primary);
-        }
-
-        .ctrl-btn:hover svg {
-            fill: #ffffff;
-        }
-
-        .pause-text-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-light);
-            font-size: 0.75rem;
-            font-weight: 700;
-            cursor: pointer;
-            padding: 4px 8px;
-            border-radius: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            transition: all 0.2s ease;
-        }
-
-        .pause-text-btn:hover {
-            color: var(--primary-dark);
-            background: rgba(253, 230, 138, 0.4);
-        }
-
-        /* GRIGLIA A 4 QUADRANTI */
-        .grid-quadrants {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: 1fr 1fr;
-            gap: 15px;
-            width: 100%;
-            height: 100%;
-        }
-
-        .quadrant-card {
-            background: linear-gradient(135deg, #ffffff 0%, #fffdf5 100%);
-            border-radius: 18px;
-            padding: 20px;
-            box-shadow: 0 4px 15px rgba(120, 53, 15, 0.05);
-            border: 2px solid #fde68a;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            text-align: left;
-            position: relative;
-            animation: fadeIn 0.6s ease-in-out;
-            min-height: 160px;
-            transition: transform 0.2s ease, border-color 0.2s ease;
-        }
-
-        .quadrant-card:hover {
-            transform: translateY(-2px);
-            border-color: var(--primary);
-        }
-
-        .quadrant-card .message-text {
-            font-style: italic;
-            font-size: 0.88rem;
-            color: #451a03;
-            font-weight: 500;
-            white-space: pre-line;
-            line-height: 1.4;
-            max-height: 120px;
-            overflow-y: auto;
-            padding-right: 5px;
-        }
-
-        .quadrant-card .message-text::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .quadrant-card .message-text::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 4px;
-        }
-
-        .quadrant-card .message-text::-webkit-scrollbar-track {
-            background: #fef3c7;
-        }
-
-        .quadrant-card .author {
-            display: block;
-            font-size: 0.78rem;
-            font-style: normal;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--primary-dark);
-            margin-top: 10px;
-            text-align: right;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.98); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        .footer {
-            margin-top: 20px;
-            font-size: 0.8rem;
-            color: var(--text-light);
-            text-align: center;
-        }
-
-        /* RESPONSIVE PER SCHERMI PICCOLI */
-        @media (max-width: 880px) {
-            .main-wrapper {
-                flex-direction: column;
-            }
-
-            .sidebar-left {
-                flex: none;
-                width: 100%;
-            }
-
-            .grid-quadrants {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* STILI CSS PER IL WIDGET CHAT APE */
-        #bee-chat-widget {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            z-index: 99999;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            font-family: system-ui, -apple-system, sans-serif;
-        }
-
-        /* Pulsante Ape Fluttuante */
-        #bee-chat-button {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background-color: #d97706;
-            border: 3px solid #fef08a;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.2s ease, background-color 0.2s ease;
-            position: relative;
-            padding: 0;
-        }
-
-        #bee-chat-button:hover {
-            transform: scale(1.08);
-            background-color: #b45309;
-        }
-
-        #bee-chat-button .bee-icon {
-            font-size: 30px;
-            line-height: 1;
-            display: block;
-        }
-
-        #bee-chat-button .bee-close-icon {
-            font-size: 32px;
-            color: white;
-            line-height: 1;
-            display: none;
-            font-weight: bold;
-        }
-
-        /* Stato aperto del pulsante */
-        #bee-chat-widget.active #bee-chat-button .bee-icon {
-            display: none;
-        }
-        #bee-chat-widget.active #bee-chat-button .bee-close-icon {
-            display: block;
-        }
-
-        /* Contenitore Iframe Chat */
-        #bee-chat-container {
-            width: 380px;
-            height: 520px;
-            margin-bottom: 12px;
-            border-radius: 18px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            transform-origin: bottom right;
-            border: 1px solid #fde68a;
-            background: #ffffff;
-        }
-
-        #bee-chat-container.bee-chat-hidden {
-            opacity: 0;
-            visibility: hidden;
-            transform: scale(0.8) translateY(20px);
-            pointer-events: none;
-        }
-
-        #bee-chat-iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        /* Adattamento per dispositivi mobili per il Widget Chat */
-        @media (max-width: 480px) {
-            #bee-chat-widget {
-                bottom: 16px;
-                right: 16px;
-            }
-            #bee-chat-container {
-                width: calc(100vw - 32px);
-                height: 75vh;
-                max-height: 500px;
-            }
+        @media (max-width: 900px) {
+            .main-wrapper { flex-direction: column; }
+            .grid-quadrants { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
     <div class="main-wrapper">
-        
-        <!-- COLONNA DI SINISTRA: LOGO E FORM -->
         <div class="sidebar-left">
             <div class="header-brand">
-                <div class="logo-container">
-                    <img src="Logo Ufficiale.jpg" alt="Logo Mielangelami" class="logo-img">
-                </div>
+                <div class="logo-container"><img src="Logo Ufficiale.jpg" alt="Logo" class="logo-img"></div>
                 <h1>Mielangelami</h1>
                 <p class="tagline">Il Miele Buono 🍯 — Mangiami</p>
             </div>
 
-            <div class="miele-box">
-                <h3>Inviaci un mielemessaggio!</h3>
-                <p>Lascia un pensiero: riceverai subito un <strong>coupon del 25%</strong> per il lancio!</p>
-                
-                <form id="mieleForm">
-                    <div class="form-group">
-                        <label for="email">La tua Email</label>
-                        <input type="email" id="email" name="email" placeholder="esempio@email.com" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="messaggio">Il tuo Mielemessaggio 🐝</label>
-                        <textarea id="messaggio" name="messaggio" placeholder="Vorrei provarlo perché..." required></textarea>
-                    </div>
-                    
-                    <div class="privacy-group" style="margin-bottom: 10px; display: flex; align-items: flex-start; gap: 8px; text-align: left;">
-                        <input type="checkbox" id="privacy" required style="margin-top: 3px; cursor: pointer; accent-color: #f59e0b;">
-                        <label for="privacy" style="font-size: 0.73rem; color: #78350f; line-height: 1.3; cursor: pointer;">
-                            Acconsento al trattamento dei dati personali per ricevere il coupon e l'avviso di lancio (GDPR).
-                        </label>
-                    </div>
-
-                    <button type="submit" id="submitBtn" class="btn-miele">Invia & Ricevi il 25%</button>
-                </form>
-                
-                <div id="successBox" class="success-message">
-                    🐝 Mielemessaggio inviato con successo!<br><br>
-                    Il tuo codice coupon del 25% è: <br>
-                    <span style="color: #d97706; font-weight: 800; font-size: 1.1rem; display: block; margin-top: 6px; background: #fff; padding: 6px; border-radius: 6px; border: 1px dashed #f59e0b;">MIELANGELA25</span>
+            <form id="mieleForm">
+                <div class="form-group">
+                    <label>La tua Email</label>
+                    <input type="email" id="email" required>
                 </div>
+                <div class="form-group">
+                    <label>Il tuo Mielemessaggio 🐝</label>
+                    <textarea id="messaggio" required></textarea>
+                </div>
+                <button type="submit" id="submitBtn" class="btn-miele">Invia & Ricevi il 25%</button>
+            </form>
+            <div id="successBox" style="display:none; padding:20px; background:#ecfdf5; border-radius:12px; text-align:center;">
+                <p>🐝 Grazie! Il tuo messaggio è LIVE.</p>
             </div>
         </div>
 
-        <!-- SEZIONE DESTRO/CENTRALE: QUADRANTI + CONTROLLI CLASSICI -->
         <div class="content-right">
             <div class="section-header">
-                <div class="section-title">🐝 Mielemessaggi</div>
-                
-                <!-- FRECCE CLASSICHE DI NAVIGAZIONE CON TESTO PAUSA -->
+                <div class="section-title">
+                    Mielemessaggi <span class="live-badge">LIVE</span>
+                </div>
                 <div class="controls-wrapper">
-                    <button class="pause-text-btn" id="pauseBtn" title="Pausa automatico">Pausa</button>
-                    <button class="ctrl-btn" id="prevBtn" title="Precedenti">
-                        <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
-                    </button>
-                    <button class="ctrl-btn" id="nextBtn" title="Successivi">
-                        <svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
-                    </button>
+                    <button id="prevBtn" class="btn-miele" style="width: auto; padding: 5px 15px;">&larr;</button>
+                    <button id="nextBtn" class="btn-miele" style="width: auto; padding: 5px 15px;">&rarr;</button>
                 </div>
             </div>
-            
-            <div class="grid-quadrants" id="gridQuadrants">
-                <!-- I 4 quadranti verranno inseriti qua via JavaScript -->
-            </div>
+            <div class="grid-quadrants" id="gridQuadrants"></div>
         </div>
-
-    </div>
-
-    <div class="footer">
-        &copy; 2019-2026 Mielangelami. www.mielangelami.com — Mangiami, Il Miele Buono. Ti amo Angelina ❤️
-    </div>
-
-    <!-- WIDGET CHAT FLUTTUANTE A FORMA DI APE -->
-    <div id="bee-chat-widget">
-      <!-- Finestra della Chat (Iframe verso Worker mielelivechat) -->
-      <div id="bee-chat-container" class="bee-chat-hidden">
-        <iframe src="https://mielangelamichat.agosto.workers.dev/" id="bee-chat-iframe" title="Mielangelami Live Chat"></iframe>
-      </div>
-
-      <!-- Pulsante Ape per Aprire/Chiudere -->
-      <button id="bee-chat-button" aria-label="Apri chat Mielangelami Live">
-        <span class="bee-icon">🐝</span>
-        <span class="bee-close-icon">&times;</span>
-      </button>
     </div>
 
     <script>
-        // CARICAMENTO CAROSELLO A 4 QUADRANTI CON CONTROLLI E PAUSA
         let allMessages = [];
         let currentIndex = 0;
-        let isPaused = false;
-        let autoRotateInterval = null;
 
         function renderQuadrants() {
-            if (allMessages.length === 0) return;
-            
-            const gridContainer = document.getElementById('gridQuadrants');
-            gridContainer.innerHTML = '';
-
+            const grid = document.getElementById('gridQuadrants');
+            grid.innerHTML = '';
             for (let i = 0; i < 4; i++) {
-                const messageIndex = (currentIndex + i) % allMessages.length;
-                const item = allMessages[messageIndex];
-
+                const item = allMessages[(currentIndex + i) % allMessages.length];
+                if (!item) continue;
                 const card = document.createElement('div');
                 card.className = 'quadrant-card';
-                card.innerHTML = `
-                    <div class="message-text">"${item.testo}"</div>
-                    <span class="author">- ${item.autore}</span>
-                `;
-                
-                card.addEventListener('mouseenter', () => { isPaused = true; });
-                card.addEventListener('mouseleave', () => { 
-                    if (pauseBtn.innerText === 'PAUSA') isPaused = false; 
-                });
-
-                gridContainer.appendChild(card);
+                card.innerHTML = `<div class="message-text">"${item.testo}"</div><div class="author">- ${item.autore}</div>`;
+                grid.appendChild(card);
             }
         }
 
-        function nextQuadrants() {
-            currentIndex = (currentIndex + 4) % allMessages.length;
-            renderQuadrants();
-        }
-
-        function prevQuadrants() {
-            currentIndex = (currentIndex - 4 + allMessages.length) % allMessages.length;
-            renderQuadrants();
-        }
-
-        function startAutoRotate() {
-            if (autoRotateInterval) clearInterval(autoRotateInterval);
-            autoRotateInterval = setInterval(() => {
-                if (!isPaused && allMessages.length > 4) {
-                    nextQuadrants();
-                }
-            }, 10000);
-        }
-
-        const pauseBtn = document.getElementById('pauseBtn');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-
-        pauseBtn.addEventListener('click', () => {
-            isPaused = !isPaused;
-            pauseBtn.innerText = isPaused ? 'RIPRENDI' : 'PAUSA';
-        });
-
-        prevBtn.addEventListener('click', () => {
-            prevQuadrants();
-        });
-
-        nextBtn.addEventListener('click', () => {
-            nextQuadrants();
-        });
-
+        // Caricamento iniziale
         fetch('testimonianze.json')
-            .then(response => response.json())
-            .then(data => {
-                allMessages = data;
-                renderQuadrants();
-                startAutoRotate();
-            })
-            .catch(error => {
-                console.error("Errore nel caricamento delle testimonianze:", error);
-            });
+            .then(res => res.json())
+            .then(data => { allMessages = data; renderQuadrants(); });
 
-        // LOGICA INVIO SICURO TRAMITE WORKER CLOUDFLARE (mielemessaggi)
-        const form = document.getElementById('mieleForm');
-        const successBox = document.getElementById('successBox');
-        const submitBtn = document.getElementById('submitBtn');
-
-        form.addEventListener('submit', function(e) {
+        // Invio Form
+        document.getElementById('mieleForm').addEventListener('submit', (e) => {
             e.preventDefault();
-            submitBtn.innerText = "Invio in corso...";
-            submitBtn.disabled = true;
-
-            const email = document.getElementById('email').value;
-            const messaggio = document.getElementById('messaggio').value;
-
-            fetch('https://mielangelami.agosto.workers.dev/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ email, messaggio })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    form.style.display = 'none';
-                    successBox.style.display = 'block';
-                } else {
-                    alert("Ops! C'è stato un problema. Riprova tra poco.");
-                    submitBtn.innerText = "Invia & Ricevi il 25%";
-                    submitBtn.disabled = false;
-                }
-            })
-            .catch(error => {
-                console.error("Errore:", error);
-                alert("Ops! Errore di connessione. Riprova tra poco.");
-                submitBtn.innerText = "Invia & Ricevi il 25%";
-                submitBtn.disabled = false;
-            });
+            const msg = {
+                testo: document.getElementById('messaggio').value,
+                autore: document.getElementById('email').value.split('@')[0]
+            };
+            
+            // Aggiunta immediata alla visualizzazione LIVE
+            allMessages.unshift(msg);
+            renderQuadrants();
+            
+            document.getElementById('mieleForm').style.display = 'none';
+            document.getElementById('successBox').style.display = 'block';
         });
 
-        // SCRIPT GESTIONE APERTURA/CHIUSURA CHAT WIDGET
-        (function() {
-            const widget = document.getElementById('bee-chat-widget');
-            const btn = document.getElementById('bee-chat-button');
-            const container = document.getElementById('bee-chat-container');
-
-            btn.addEventListener('click', () => {
-                widget.classList.toggle('active');
-                container.classList.toggle('bee-chat-hidden');
-            });
-        })();
+        document.getElementById('nextBtn').onclick = () => { currentIndex += 4; renderQuadrants(); };
+        document.getElementById('prevBtn').onclick = () => { currentIndex = Math.max(0, currentIndex - 4); renderQuadrants(); };
     </script>
 </body>
 </html>
