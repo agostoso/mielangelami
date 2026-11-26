@@ -807,5 +807,250 @@
             });
         })();
     </script>
+
+    <!-- ============================================================
+         CASCATA DI VASETTI DI MIELE — Laurea di Mielangela 🎓
+         Blocco autonomo: per rimuoverla basta cancellare da qui
+         fino al </script> successivo.
+         ============================================================ -->
+    <script>
+    (function () {
+        // ---- impostazioni facili da cambiare ----
+        const DURATA_CASCATA_MS = 12000;   // quanto a lungo continuano a cadere
+        // immagine dentro ogni vasetto: percorso relativo, il file sta nella stessa
+        // cartella di index.html (nel repo GitHub: mielangelami/laureangela.png)
+        const IMMAGINE = 'laureangela.png';
+        const TITOLO = 'Congratulazioni, Mielangela!';
+        const SOTTOTITOLO = 'Il traguardo più dolce di tutti, proprio come il tuo miele.';
+
+        // ---- stile (iniettato qui, non modifica il CSS del sito) ----
+        const style = document.createElement('style');
+        style.textContent = `
+            #laurea-cascata {
+                position: fixed;
+                inset: 0;
+                overflow: hidden;
+                pointer-events: none;   /* non intercetta mai tocchi o click */
+                z-index: 900;           /* sotto il widget chat (1000) */
+            }
+            .vasetto {
+                position: absolute;
+                top: -90px;
+                will-change: transform, opacity;
+                animation: vasettoCade var(--dur) linear forwards;
+            }
+            /* wrapper unico: vasetto + immagine + riflesso si muovono sempre insieme */
+            .vasetto-inner {
+                position: relative;
+                width: 100%;
+                aspect-ratio: 60 / 76;
+                animation: vasettoOndeggia var(--sway) ease-in-out infinite alternate;
+                filter: drop-shadow(0 3px 4px rgba(120, 53, 15, 0.25));
+            }
+            .vasetto-inner svg {
+                position: absolute;
+                inset: 0;
+                width: 100%;
+                height: 100%;
+                display: block;
+            }
+            .vasetto-inner img {
+                position: absolute;
+                /* stessa posizione che aveva dentro l'SVG (13,31 su 60x76) */
+                left: 21.667%;
+                top: 40.789%;
+                width: 56.667%;
+                height: 42.105%;
+                object-fit: contain;
+                display: block;
+                pointer-events: none;
+                -webkit-user-drag: none;
+            }
+            @keyframes vasettoCade {
+                0%   { transform: translateY(0) rotate(var(--rot-start)); opacity: 0; }
+                6%   { opacity: 1; }
+                90%  { opacity: 1; }
+                100% { transform: translateY(calc(100vh + 160px)) rotate(var(--rot-end)); opacity: 0; }
+            }
+            @keyframes vasettoOndeggia {
+                from { transform: translateX(calc(var(--drift) * -1)); }
+                to   { transform: translateX(var(--drift)); }
+            }
+            #laurea-messaggio {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                width: min(86vw, 360px);
+                padding: 44px 24px 24px;
+                background: linear-gradient(180deg, #fffdf5 0%, #fff3c4 100%);
+                color: #451a03;
+                border: 2px solid #fcd34d;
+                border-radius: 28px;
+                box-shadow: 0 18px 50px rgba(120, 53, 15, 0.28);
+                text-align: center;
+                z-index: 901;
+                cursor: pointer;            /* un tocco la chiude */
+                -webkit-tap-highlight-color: transparent;
+                animation: laureaEntra 1s cubic-bezier(.2, .9, .3, 1.15) both,
+                           laureaEsci 0.9s ease-in 8.2s forwards;
+            }
+            @keyframes laureaEntra {
+                from { opacity: 0; transform: translate(-50%, -38%) scale(0.85); }
+                to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            }
+            @keyframes laureaEsci {
+                to { opacity: 0; transform: translate(-50%, -58%) scale(0.96); }
+            }
+            /* miele che cola dal bordo superiore */
+            #laurea-messaggio .laurea-miele {
+                position: absolute;
+                top: -2px;
+                left: -2px;
+                width: calc(100% + 4px);
+                height: 44px;
+                pointer-events: none;
+            }
+            #laurea-messaggio .laurea-icona {
+                display: block;
+                font-size: 2.6rem;
+                line-height: 1;
+                margin-bottom: 10px;
+                animation: laureaDondola 2.8s ease-in-out infinite;
+            }
+            @keyframes laureaDondola {
+                0%, 100% { transform: rotate(-6deg) translateY(0); }
+                50%      { transform: rotate(6deg) translateY(-4px); }
+            }
+            #laurea-messaggio .laurea-titolo {
+                font-family: 'Segoe Script', 'Bradley Hand', 'Snell Roundhand', 'Comic Sans MS', cursive;
+                font-size: 1.55rem;
+                font-weight: 700;
+                line-height: 1.2;
+                color: #451a03;
+                margin-bottom: 8px;
+            }
+            #laurea-messaggio .laurea-sotto {
+                font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+                font-size: 0.92rem;
+                font-weight: 600;
+                line-height: 1.4;
+                color: #78350f;
+            }
+            /* cuoricini che salgono */
+            #laurea-messaggio .laurea-cuore {
+                position: absolute;
+                bottom: 14px;
+                left: var(--x);
+                font-size: var(--s);
+                opacity: 0;
+                pointer-events: none;
+                animation: laureaCuore 3.6s ease-in infinite;
+                animation-delay: var(--d);
+            }
+            @keyframes laureaCuore {
+                0%   { transform: translateY(0) scale(0.6); opacity: 0; }
+                20%  { opacity: 0.9; }
+                100% { transform: translateY(-120px) scale(1.1); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // ---- contenitori ----
+        const layer = document.createElement('div');
+        layer.id = 'laurea-cascata';
+        layer.setAttribute('aria-hidden', 'true');
+        document.body.appendChild(layer);
+
+        const msg = document.createElement('div');
+        msg.id = 'laurea-messaggio';
+        msg.setAttribute('role', 'status');
+        msg.innerHTML = `
+            <svg class="laurea-miele" viewBox="0 0 360 44" preserveAspectRatio="none" aria-hidden="true">
+                <path d="M0 0 H360 V14 C352 14 350 30 342 30 C334 30 332 14 322 14
+                         C312 14 310 38 300 38 C290 38 288 14 276 14
+                         C266 14 264 26 256 26 C248 26 246 14 234 14
+                         C222 14 220 34 210 34 C200 34 198 14 186 14
+                         C174 14 172 28 164 28 C156 28 154 14 142 14
+                         C130 14 128 40 118 40 C108 40 106 14 94 14
+                         C84 14 82 24 74 24 C66 24 64 14 52 14
+                         C42 14 40 32 30 32 C20 32 18 14 8 14 C4 14 2 14 0 14 Z"
+                      fill="#f59e0b"/>
+                <path d="M0 0 H360 V8 H0 Z" fill="#fbbf24"/>
+            </svg>
+            <span class="laurea-icona" aria-hidden="true">🎓</span>
+            <div class="laurea-titolo"></div>
+            <div class="laurea-sotto"></div>
+            <span class="laurea-cuore" style="--x:12%; --s:16px; --d:0s"   aria-hidden="true">💛</span>
+            <span class="laurea-cuore" style="--x:28%; --s:12px; --d:1.2s" aria-hidden="true">🍯</span>
+            <span class="laurea-cuore" style="--x:46%; --s:18px; --d:0.6s" aria-hidden="true">💛</span>
+            <span class="laurea-cuore" style="--x:64%; --s:13px; --d:1.9s" aria-hidden="true">❤️</span>
+            <span class="laurea-cuore" style="--x:80%; --s:16px; --d:0.3s" aria-hidden="true">💛</span>
+            <span class="laurea-cuore" style="--x:90%; --s:12px; --d:2.4s" aria-hidden="true">🐝</span>
+        `;
+        msg.querySelector('.laurea-titolo').textContent = TITOLO;
+        msg.querySelector('.laurea-sotto').textContent = SOTTOTITOLO;
+        msg.addEventListener('click', () => msg.remove());
+        document.body.appendChild(msg);
+        setTimeout(() => msg.remove(), 9200);
+
+        // ---- vasetto SVG (tre varianti di colore del miele) ----
+        const MIELI = [
+            ['#fbbf24', '#f59e0b'],
+            ['#f59e0b', '#d97706'],
+            ['#fcd34d', '#f59e0b']
+        ];
+        function vasettoSVG(i) {
+            const [chiaro, scuro] = MIELI[i % MIELI.length];
+            return `
+            <div class="vasetto-inner">
+                <svg viewBox="0 0 60 76" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="14" y="2" width="32" height="12" rx="3" fill="#78350f"/>
+                    <rect x="14" y="2" width="32" height="4" rx="2" fill="#92400e"/>
+                    <path d="M10 16 H50 Q56 22 56 34 V62 Q56 74 44 74 H16 Q4 74 4 62 V34 Q4 22 10 16 Z"
+                          fill="${chiaro}" stroke="${scuro}" stroke-width="2"/>
+                    <rect x="11" y="29" width="38" height="36" rx="4" fill="#fffbeb"/>
+                </svg>
+                <img src="${IMMAGINE}" alt="" draggable="false">
+                <svg viewBox="0 0 60 76" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 24 Q10 36 12 52" stroke="#fff" stroke-opacity="0.45" stroke-width="3"
+                          stroke-linecap="round" fill="none"/>
+                </svg>
+            </div>`;
+        }
+
+        // ---- generatore ----
+        const piccolo = window.innerWidth < 600;
+        const intervallo = piccolo ? 420 : 260;
+        let n = 0;
+
+        function lanciaVasetto() {
+            const el = document.createElement('div');
+            el.className = 'vasetto';
+            const larghezza = (piccolo ? 30 : 34) + Math.random() * (piccolo ? 22 : 34);
+            el.style.width = larghezza + 'px';
+            el.style.left = Math.random() * (window.innerWidth - larghezza) + 'px';
+            el.style.setProperty('--dur', (4.5 + Math.random() * 3.5).toFixed(2) + 's');
+            el.style.setProperty('--sway', (1.2 + Math.random() * 1.6).toFixed(2) + 's');
+            el.style.setProperty('--drift', (8 + Math.random() * 22).toFixed(0) + 'px');
+            const rot = (Math.random() * 40 - 20);
+            el.style.setProperty('--rot-start', rot.toFixed(0) + 'deg');
+            el.style.setProperty('--rot-end', (rot + (Math.random() * 140 - 70)).toFixed(0) + 'deg');
+            el.innerHTML = vasettoSVG(n++);
+            el.addEventListener('animationend', (e) => {
+                if (e.animationName === 'vasettoCade') el.remove();
+            });
+            layer.appendChild(el);
+        }
+
+        const timer = setInterval(lanciaVasetto, intervallo);
+        setTimeout(() => {
+            clearInterval(timer);
+            // elimina il contenitore quando l'ultimo vasetto è sparito
+            const check = setInterval(() => {
+                if (!layer.children.length) { layer.remove(); clearInterval(check); }
+            }, 1000);
+        }, DURATA_CASCATA_MS);
+    })();
+    </script>
 </body>
 </html>
