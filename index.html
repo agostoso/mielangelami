@@ -541,6 +541,244 @@
             }
         }
     </style>
+    <style id="laurea-col-style">
+        /* ===== COLONNA CENTRALE: CONGRATULAZIONI A FORMA DI VASETTO + MINIGIOCO ===== */
+        .laurea-col [hidden] { display: none !important; }
+        .laurea-col {
+            flex: 0 0 250px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-width: 0;
+        }
+
+        .laurea-jar {
+            position: relative;
+            width: 250px;
+            aspect-ratio: 250 / 330;
+            filter: drop-shadow(0 8px 10px rgba(120, 53, 15, 0.28));
+            animation: laureaPop 0.7s cubic-bezier(.2, .9, .3, 1.2) both,
+                       laureaBob 4.5s ease-in-out 0.7s infinite;
+        }
+        @keyframes laureaPop {
+            from { opacity: 0; transform: scale(0.6) translateY(20px); }
+            to   { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        @keyframes laureaBob {
+            0%, 100% { transform: translateY(0) rotate(-1deg); }
+            50%      { transform: translateY(-7px) rotate(1deg); }
+        }
+        .laurea-jar > svg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        .laurea-x {
+            position: absolute;
+            top: 17%;
+            right: 1%;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            background: #92400e;
+            color: #fff;
+            font-size: 20px;
+            line-height: 1;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 0 2px 0;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            touch-action: manipulation;
+            transition: transform 0.15s ease, background 0.15s ease;
+        }
+        .laurea-x:hover { transform: scale(1.1); background: #b45309; }
+        .laurea-label {
+            position: absolute;
+            left: 15.2%;
+            top: 35.8%;
+            width: 69.6%;
+            height: 53.3%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 6px 18px;
+            gap: 4px;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .laurea-label img {
+            width: 46px;
+            height: 46px;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+        .laurea-label .laurea-emoji { font-size: 2.2rem; line-height: 1; }
+        .laurea-t {
+            width: 100%;
+            font-family: 'Segoe Script', 'Bradley Hand', 'Snell Roundhand', 'Comic Sans MS', cursive;
+            font-size: 15px;            /* il JS lo riduce se serve, per restare nei margini */
+            font-weight: 700;
+            line-height: 1.2;
+            color: #451a03;
+        }
+        .laurea-t span { display: block; white-space: nowrap; }
+        .laurea-s {
+            width: 100%;
+            font-size: 10.5px;
+            font-weight: 600;
+            line-height: 1.3;
+            color: #78350f;
+            overflow-wrap: anywhere;
+        }
+
+        /* minigioco */
+        .laurea-game {
+            width: 100%;
+            max-width: 250px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid #fde68a;
+            border-radius: 22px;
+            padding: 14px 12px 12px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(120, 53, 15, 0.08);
+            animation: laureaPop 0.5s cubic-bezier(.2, .9, .3, 1.2) both;
+        }
+        .lg-title {
+            font-weight: 800;
+            font-size: 0.95rem;
+            color: var(--primary-dark);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .lg-status {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text-light);
+            margin: 4px 0 8px;
+            min-height: 2.4em;
+            line-height: 1.2;
+        }
+        .lg-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin: 0 auto;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        .lg-hole {
+            position: relative;
+            aspect-ratio: 1;
+            border: none;
+            padding: 0;
+            border-radius: 16px;
+            background: #fff3c4;
+            overflow: hidden;
+            cursor: pointer;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .lg-hole:focus-visible { outline: 3px solid var(--primary-dark); outline-offset: 2px; }
+        /* buco scuro dietro e bordino davanti: il vasetto "esce" da lì */
+        .lg-hole::before {
+            content: "";
+            position: absolute;
+            left: 10%; right: 10%; bottom: 6%;
+            height: 26%;
+            border-radius: 50%;
+            background: #78350f;
+            box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.4);
+            z-index: 1;
+        }
+        .lg-hole::after {
+            content: "";
+            position: absolute;
+            left: 0; right: 0; bottom: 0;
+            height: 17%;
+            background: #fde68a;
+            border-top-left-radius: 50% 100%;
+            border-top-right-radius: 50% 100%;
+            z-index: 3;
+        }
+        .lg-item {
+            position: absolute;
+            left: 50%;
+            bottom: 10%;
+            width: 62%;
+            aspect-ratio: 60 / 80;
+            z-index: 2;
+            transform: translate(-50%, 125%);
+            transition: transform 0.16s ease-out;
+            pointer-events: none;
+        }
+        .lg-hole.su .lg-item { transform: translate(-50%, 0); }
+        .lg-hole.colpito .lg-item { transition-duration: 0.1s; }
+        .lg-item svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+        .lg-item img {
+            position: absolute;
+            left: 23.333%; top: 42.5%;
+            width: 53.333%; height: 40%;
+            object-fit: contain;
+            border-radius: 3px;
+            -webkit-user-drag: none;
+        }
+        .lg-bee { display: none; font-size: 2.1rem; line-height: 1; align-items: center; justify-content: center; height: 100%; }
+        .lg-hole.ape .lg-jar { display: none; }
+        .lg-hole.ape .lg-bee { display: flex; }
+        .lg-pop {
+            position: absolute;
+            top: 6%; left: 0; right: 0;
+            text-align: center;
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: var(--primary-dark);
+            opacity: 0;
+            z-index: 4;
+            pointer-events: none;
+        }
+        .lg-pop.vai { animation: lgPop 0.6s ease-out; }
+        .lg-pop.meno { color: #b91c1c; }
+        @keyframes lgPop {
+            0%   { opacity: 1; transform: translateY(10px) scale(0.8); }
+            100% { opacity: 0; transform: translateY(-14px) scale(1.2); }
+        }
+        .lg-skip {
+            margin-top: 10px;
+            background: transparent;
+            border: none;
+            color: var(--text-light);
+            font-family: inherit;
+            font-size: 0.74rem;
+            font-weight: 700;
+            text-decoration: underline;
+            cursor: pointer;
+            padding: 6px 10px;
+            touch-action: manipulation;
+        }
+
+        /* tra 881px e 1100px: form e vasetto affiancati, mielemessaggi sotto a tutta larghezza */
+        @media (max-width: 1100px) and (min-width: 881px) {
+            .main-wrapper { flex-wrap: wrap; }
+            .laurea-col { flex: 1 1 0; }
+            .content-right { flex: 1 1 100%; }
+        }
+        /* mobile: colonna unica, il vasetto sta in mezzo tra form e mielemessaggi */
+        @media (max-width: 880px) {
+            .laurea-col { flex: none; width: 100%; padding: 6px 0; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .laurea-jar, .laurea-game { animation: none; }
+        }
+    </style>
 </head>
 <body>
 
@@ -589,6 +827,71 @@
                     Il tuo codice coupon del 25% è: <br>
                     <span class="coupon-code">MIELANGELA25</span>
                 </div>
+            </div>
+        </div>
+
+        <!-- COLONNA CENTRALE: CONGRATULAZIONI A FORMA DI VASETTO (chiudibile) + MINIGIOCO PER RIAPRIRLO -->
+        <div class="laurea-col" id="laureaCol">
+            <div class="laurea-jar" id="laureaJar">
+                <svg viewBox="0 0 250 330" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <defs>
+                        <linearGradient id="ljMiele" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0" stop-color="#d97706"/>
+                            <stop offset="0.3" stop-color="#fde68a"/>
+                            <stop offset="0.65" stop-color="#fbbf24"/>
+                            <stop offset="1" stop-color="#d97706"/>
+                        </linearGradient>
+                        <linearGradient id="ljCop" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0" stop-color="#78350f"/>
+                            <stop offset="0.3" stop-color="#b45309"/>
+                            <stop offset="0.6" stop-color="#92400e"/>
+                            <stop offset="1" stop-color="#5c2a0a"/>
+                        </linearGradient>
+                    </defs>
+                    <!-- corpo del vasetto -->
+                    <path d="M62 60 H188 Q232 80 232 126 V274 Q232 322 190 322 H60 Q18 322 18 274 V126 Q18 80 62 60 Z"
+                          fill="url(#ljMiele)" stroke="#d97706" stroke-width="3"/>
+                    <!-- coperchio -->
+                    <rect x="55" y="6" width="140" height="42" rx="11" fill="url(#ljCop)"/>
+                    <path d="M68 18 H182 M68 28 H182 M68 38 H182" stroke="#451a03" stroke-opacity="0.25"
+                          stroke-width="2" stroke-linecap="round"/>
+                    <rect x="62" y="9" width="126" height="6" rx="3" fill="#fff" fill-opacity="0.28"/>
+                    <!-- goccia di miele che cola dal coperchio -->
+                    <path d="M150 46 Q150 74 160 74 Q170 74 170 46 Z" fill="#f59e0b"/>
+                    <path d="M92 46 Q92 62 98 62 Q104 62 104 46 Z" fill="#f59e0b"/>
+                    <!-- nastrino con fiocco -->
+                    <rect x="48" y="46" width="154" height="13" rx="5" fill="#dc2626"/>
+                    <path d="M125 52 L97 38 Q86 52 97 66 Z" fill="#dc2626"/>
+                    <path d="M125 52 L153 38 Q164 52 153 66 Z" fill="#dc2626"/>
+                    <circle cx="125" cy="52" r="7" fill="#fff" fill-opacity="0.35"/>
+                    <!-- etichetta -->
+                    <rect x="38" y="118" width="174" height="176" rx="20" fill="#fffbeb" stroke="#d97706" stroke-width="2"/>
+                    <rect x="45" y="125" width="160" height="162" rx="15" fill="none" stroke="#f59e0b"
+                          stroke-width="1.5" stroke-dasharray="6 5"/>
+                    <!-- riflessi del vetro -->
+                    <path d="M30 128 Q26 200 30 270" stroke="#fff" stroke-opacity="0.55" stroke-width="8"
+                          stroke-linecap="round" fill="none"/>
+                    <path d="M222 140 Q226 190 222 240" stroke="#fff" stroke-opacity="0.3" stroke-width="5"
+                          stroke-linecap="round" fill="none"/>
+                    <ellipse cx="34" cy="104" rx="6" ry="4" fill="#fff" fill-opacity="0.6"/>
+                </svg>
+
+                <button type="button" class="laurea-x" id="laureaChiudi" aria-label="Chiudi le congratulazioni">&times;</button>
+
+                <div class="laurea-label">
+                    <img src="laureangela.png" alt=""
+                         onerror="this.hidden=true;this.nextElementSibling.hidden=false">
+                    <span class="laurea-emoji" hidden>🎓</span>
+                    <div class="laurea-t"><span>Congratulazioni,</span><span>Mielangela!</span></div>
+                    <div class="laurea-s">Il traguardo più dolce di tutti, proprio come il tuo miele.</div>
+                </div>
+            </div>
+
+            <div class="laurea-game" id="laureaGame" hidden>
+                <div class="lg-title">🍯 Colpisci i vasetti</div>
+                <div class="lg-status" id="lgStatus" aria-live="polite">Colpisci 5 vasetti per riaprire le congratulazioni!</div>
+                <div class="lg-grid" id="lgGrid"></div>
+                <button type="button" class="lg-skip" id="lgSkip">Riapri subito</button>
             </div>
         </div>
 
@@ -820,8 +1123,6 @@
         // immagine dentro ogni vasetto: percorso relativo, il file sta nella stessa
         // cartella di index.html (nel repo GitHub: mielangelami/laureangela.png)
         const IMMAGINE = 'laureangela.png';
-        const TITOLO = 'Congratulazioni, Mielangela!';
-        const SOTTOTITOLO = 'Il traguardo più dolce di tutti, proprio come il tuo miele.';
 
         // ---- stile (iniettato qui, non modifica il CSS del sito) ----
         const style = document.createElement('style');
@@ -877,82 +1178,6 @@
                 from { transform: translateX(calc(var(--drift) * -1)); }
                 to   { transform: translateX(var(--drift)); }
             }
-            #laurea-messaggio {
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                width: min(86vw, 360px);
-                padding: 44px 24px 24px;
-                background: linear-gradient(180deg, #fffdf5 0%, #fff3c4 100%);
-                color: #451a03;
-                border: 2px solid #fcd34d;
-                border-radius: 28px;
-                box-shadow: 0 18px 50px rgba(120, 53, 15, 0.28);
-                text-align: center;
-                z-index: 901;
-                cursor: pointer;            /* un tocco la chiude */
-                -webkit-tap-highlight-color: transparent;
-                animation: laureaEntra 1s cubic-bezier(.2, .9, .3, 1.15) both,
-                           laureaEsci 0.9s ease-in 8.2s forwards;
-            }
-            @keyframes laureaEntra {
-                from { opacity: 0; transform: translate(-50%, -38%) scale(0.85); }
-                to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-            }
-            @keyframes laureaEsci {
-                to { opacity: 0; transform: translate(-50%, -58%) scale(0.96); }
-            }
-            /* miele che cola dal bordo superiore */
-            #laurea-messaggio .laurea-miele {
-                position: absolute;
-                top: -2px;
-                left: -2px;
-                width: calc(100% + 4px);
-                height: 44px;
-                pointer-events: none;
-            }
-            #laurea-messaggio .laurea-icona {
-                display: block;
-                font-size: 2.6rem;
-                line-height: 1;
-                margin-bottom: 10px;
-                animation: laureaDondola 2.8s ease-in-out infinite;
-            }
-            @keyframes laureaDondola {
-                0%, 100% { transform: rotate(-6deg) translateY(0); }
-                50%      { transform: rotate(6deg) translateY(-4px); }
-            }
-            #laurea-messaggio .laurea-titolo {
-                font-family: 'Segoe Script', 'Bradley Hand', 'Snell Roundhand', 'Comic Sans MS', cursive;
-                font-size: 1.55rem;
-                font-weight: 700;
-                line-height: 1.2;
-                color: #451a03;
-                margin-bottom: 8px;
-            }
-            #laurea-messaggio .laurea-sotto {
-                font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-                font-size: 0.92rem;
-                font-weight: 600;
-                line-height: 1.4;
-                color: #78350f;
-            }
-            /* cuoricini che salgono */
-            #laurea-messaggio .laurea-cuore {
-                position: absolute;
-                bottom: 14px;
-                left: var(--x);
-                font-size: var(--s);
-                opacity: 0;
-                pointer-events: none;
-                animation: laureaCuore 3.6s ease-in infinite;
-                animation-delay: var(--d);
-            }
-            @keyframes laureaCuore {
-                0%   { transform: translateY(0) scale(0.6); opacity: 0; }
-                20%  { opacity: 0.9; }
-                100% { transform: translateY(-120px) scale(1.1); opacity: 0; }
-            }
         `;
         document.head.appendChild(style);
 
@@ -961,38 +1186,6 @@
         layer.id = 'laurea-cascata';
         layer.setAttribute('aria-hidden', 'true');
         document.body.appendChild(layer);
-
-        const msg = document.createElement('div');
-        msg.id = 'laurea-messaggio';
-        msg.setAttribute('role', 'status');
-        msg.innerHTML = `
-            <svg class="laurea-miele" viewBox="0 0 360 44" preserveAspectRatio="none" aria-hidden="true">
-                <path d="M0 0 H360 V14 C352 14 350 30 342 30 C334 30 332 14 322 14
-                         C312 14 310 38 300 38 C290 38 288 14 276 14
-                         C266 14 264 26 256 26 C248 26 246 14 234 14
-                         C222 14 220 34 210 34 C200 34 198 14 186 14
-                         C174 14 172 28 164 28 C156 28 154 14 142 14
-                         C130 14 128 40 118 40 C108 40 106 14 94 14
-                         C84 14 82 24 74 24 C66 24 64 14 52 14
-                         C42 14 40 32 30 32 C20 32 18 14 8 14 C4 14 2 14 0 14 Z"
-                      fill="#f59e0b"/>
-                <path d="M0 0 H360 V8 H0 Z" fill="#fbbf24"/>
-            </svg>
-            <span class="laurea-icona" aria-hidden="true">🎓</span>
-            <div class="laurea-titolo"></div>
-            <div class="laurea-sotto"></div>
-            <span class="laurea-cuore" style="--x:12%; --s:16px; --d:0s"   aria-hidden="true">💛</span>
-            <span class="laurea-cuore" style="--x:28%; --s:12px; --d:1.2s" aria-hidden="true">🍯</span>
-            <span class="laurea-cuore" style="--x:46%; --s:18px; --d:0.6s" aria-hidden="true">💛</span>
-            <span class="laurea-cuore" style="--x:64%; --s:13px; --d:1.9s" aria-hidden="true">❤️</span>
-            <span class="laurea-cuore" style="--x:80%; --s:16px; --d:0.3s" aria-hidden="true">💛</span>
-            <span class="laurea-cuore" style="--x:90%; --s:12px; --d:2.4s" aria-hidden="true">🐝</span>
-        `;
-        msg.querySelector('.laurea-titolo').textContent = TITOLO;
-        msg.querySelector('.laurea-sotto').textContent = SOTTOTITOLO;
-        msg.addEventListener('click', () => msg.remove());
-        document.body.appendChild(msg);
-        setTimeout(() => msg.remove(), 9200);
 
         // ---- vasetto SVG (tre varianti di colore del miele) ----
         const MIELI = [
@@ -1086,6 +1279,154 @@
                 if (!layer.children.length) { layer.remove(); clearInterval(check); }
             }, 1000);
         }, DURATA_CASCATA_MS);
+    })();
+    </script>
+    <!-- ============================================================
+         COLPISCI I VASETTI — minigioco per riaprire il vasetto delle congratulazioni
+         Blocco autonomo: per rimuoverlo basta cancellare da qui al </script> successivo.
+         ============================================================ -->
+    <script>
+    (function () {
+        const jar = document.getElementById('laureaJar');
+        const game = document.getElementById('laureaGame');
+        const grid = document.getElementById('lgGrid');
+        const statusEl = document.getElementById('lgStatus');
+        if (!jar || !game || !grid) return;
+
+        const OBIETTIVO = 5;          // vasetti da colpire per riaprire
+        const IMMAGINE = 'laureangela.png';
+
+        const ITEM = `
+            <div class="lg-item">
+                <div class="lg-jar" style="position:absolute;inset:0">
+                    <svg viewBox="0 0 60 80" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M11 17 H49 Q57 22 57 34 V68 Q57 78 47 78 H13 Q3 78 3 68 V34 Q3 22 11 17 Z"
+                              fill="#fbbf24" stroke="#d97706" stroke-width="1.8"/>
+                        <rect x="13" y="3" width="34" height="13" rx="3.5" fill="#92400e"/>
+                        <rect x="15" y="4.5" width="30" height="2" rx="1" fill="#fff" fill-opacity="0.3"/>
+                        <rect x="12" y="16" width="36" height="4" rx="1.5" fill="#dc2626"/>
+                        <path d="M30 18 L22 14 Q19 18 22 22 Z M30 18 L38 14 Q41 18 38 22 Z" fill="#dc2626"/>
+                        <rect x="10.5" y="31.5" width="39" height="39" rx="6" fill="#fffbeb" stroke="#d97706" stroke-width="1"/>
+                        <path d="M8 36 Q6 50 8 66" stroke="#fff" stroke-opacity="0.55" stroke-width="2.4"
+                              stroke-linecap="round" fill="none"/>
+                    </svg>
+                    <img src="${IMMAGINE}" alt="" draggable="false" onerror="this.style.display='none'">
+                </div>
+                <div class="lg-bee" aria-hidden="true">🐝</div>
+            </div>
+            <span class="lg-pop"></span>`;
+
+        const celle = [];
+        for (let i = 0; i < 9; i++) {
+            const c = document.createElement('button');
+            c.type = 'button';
+            c.className = 'lg-hole';
+            c.setAttribute('aria-label', 'Buco ' + (i + 1));
+            c.innerHTML = ITEM;
+            c._vivo = false;
+            c._ape = false;
+            c._t = null;
+            c.addEventListener('pointerdown', (e) => { e.preventDefault(); colpisci(c); });
+            c.addEventListener('click', (e) => { if (e.detail === 0) colpisci(c); }); // tastiera
+            grid.appendChild(c);
+            celle.push(c);
+        }
+
+        let punti = 0, attivo = false, spawnTimer = null;
+
+        function durata() { return Math.max(650, 1250 - punti * 120); }
+
+        function nascondi(c) {
+            clearTimeout(c._t);
+            c._vivo = false;
+            c.classList.remove('su', 'colpito');
+        }
+        function mostra(c, ape) {
+            clearTimeout(c._t);
+            c._ape = ape;
+            c._vivo = true;
+            c.classList.toggle('ape', ape);
+            c.classList.remove('colpito');
+            c.classList.add('su');
+            c._t = setTimeout(() => nascondi(c), durata());
+        }
+        function spawn() {
+            if (!attivo || document.hidden) return;
+            const libere = celle.filter(c => !c._vivo);
+            if (celle.length - libere.length >= 2) return;      // al massimo 2 vasetti insieme
+            const c = libere[Math.floor(Math.random() * libere.length)];
+            if (c) mostra(c, punti > 0 && Math.random() < 0.18); // ogni tanto spunta un'ape: non colpirla!
+        }
+        function pop(c, testo, meno) {
+            const el = c.querySelector('.lg-pop');
+            el.textContent = testo;
+            el.classList.toggle('meno', !!meno);
+            el.classList.remove('vai');
+            void el.offsetWidth;
+            el.classList.add('vai');
+        }
+        function colpisci(c) {
+            if (!attivo || !c._vivo) return;
+            c._vivo = false;
+            clearTimeout(c._t);
+            c.classList.remove('su');
+            c.classList.add('colpito');
+            if (c._ape) {
+                punti = Math.max(0, punti - 1);
+                pop(c, '−1', true);
+                statusEl.textContent = 'Ahi, era un\'ape! 🐝 Vasetti: ' + punti + '/' + OBIETTIVO;
+            } else {
+                punti++;
+                pop(c, '+1');
+                statusEl.textContent = 'Vasetti colpiti: ' + punti + '/' + OBIETTIVO;
+                if (punti >= OBIETTIVO) vinto();
+            }
+        }
+        function vinto() {
+            attivo = false;
+            clearInterval(spawnTimer);
+            statusEl.textContent = 'Fatto! 🍯 Riapro il vasetto…';
+            setTimeout(mostraVasetto, 900);
+        }
+
+        function mostraGioco() {
+            punti = 0;
+            celle.forEach(nascondi);
+            statusEl.textContent = 'Colpisci ' + OBIETTIVO + ' vasetti per riaprire le congratulazioni!';
+            jar.hidden = true;
+            game.hidden = false;
+            attivo = true;
+            clearInterval(spawnTimer);
+            spawnTimer = setInterval(spawn, 600);
+            setTimeout(spawn, 250);
+        }
+        function mostraVasetto() {
+            attivo = false;
+            clearInterval(spawnTimer);
+            spawnTimer = null;
+            celle.forEach(nascondi);
+            game.hidden = true;
+            jar.hidden = false;
+            adattaTitolo();
+        }
+
+        // adatta la dimensione del titolo così resta sempre dentro i margini dell'etichetta
+        function adattaTitolo() {
+            const t = jar.querySelector('.laurea-t');
+            if (!t || !t.clientWidth) return;          // vasetto nascosto: niente da misurare
+            let size = 15;
+            t.style.fontSize = size + 'px';
+            while (size > 9 && Array.from(t.children).some(sp => sp.scrollWidth > t.clientWidth)) {
+                size -= 0.5;
+                t.style.fontSize = size + 'px';
+            }
+        }
+        adattaTitolo();
+        window.addEventListener('load', adattaTitolo);
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(adattaTitolo);
+
+        document.getElementById('laureaChiudi').addEventListener('click', mostraGioco);
+        document.getElementById('lgSkip').addEventListener('click', mostraVasetto);
     })();
     </script>
 </body>
