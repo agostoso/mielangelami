@@ -667,6 +667,16 @@
             min-height: 2.4em;
             line-height: 1.2;
         }
+        .lg-status.lg-vittoria {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            animation: lgVittoria 0.5s cubic-bezier(.2, .9, .3, 1.4) both;
+        }
+        @keyframes lgVittoria {
+            from { opacity: 0; transform: scale(0.6); }
+            to   { opacity: 1; transform: scale(1); }
+        }
         .lg-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -1382,16 +1392,35 @@
                 if (punti >= OBIETTIVO) vinto();
             }
         }
+        // messaggi di vittoria: tutti finiscono con "angela" (aggiungine quanti vuoi!)
+        const MESSAGGI_VITTORIA = [
+            'Vittoriangela', 'Grandangela', 'Bravangela', 'Campionangela',
+            'Trionfangela', 'Gloriangela', 'Superangela', 'Fantasticangela',
+            'Magnificangela', 'Stupendangela', 'Favolangela', 'Dolcangela',
+            'Eroicangela', 'Leggendangela', 'Imbattibilangela', 'Splendidangela',
+            'Fenomenangela', 'Strepitosangela'
+        ];
+        let ultimoMessaggio = -1;
+        function messaggioVittoria() {
+            let i;
+            do { i = Math.floor(Math.random() * MESSAGGI_VITTORIA.length); }
+            while (i === ultimoMessaggio && MESSAGGI_VITTORIA.length > 1);
+            ultimoMessaggio = i;
+            return MESSAGGI_VITTORIA[i];
+        }
+
         function vinto() {
             attivo = false;
             clearInterval(spawnTimer);
-            statusEl.textContent = 'Fatto! 🍯 Riapro il vasetto…';
-            setTimeout(mostraVasetto, 900);
+            statusEl.classList.add('lg-vittoria');
+            statusEl.textContent = '🏆 ' + messaggioVittoria() + '! 🍯';
+            setTimeout(mostraVasetto, 2200);
         }
 
         function mostraGioco() {
             punti = 0;
             celle.forEach(nascondi);
+            statusEl.classList.remove('lg-vittoria');
             statusEl.textContent = 'Colpisci ' + OBIETTIVO + ' vasetti per riaprire le congratulazioni!';
             jar.hidden = true;
             game.hidden = false;
